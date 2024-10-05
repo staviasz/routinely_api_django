@@ -8,23 +8,21 @@ from main.errors.shared import (
 
 
 class ConcreteCustomError(CustomErrorAbstract):
-    def init_props(self, inputObjectError: InputObjectErrorType) -> None:
-        self._code_error = inputObjectError["code_error"]
-        self._message_error = inputObjectError["message_error"]
+    def __init__(self, inputObjectError: InputObjectErrorType) -> None:
+        super().__init__(
+            inputObjectError["code_error"], inputObjectError["message_error"]
+        )
 
 
-# Testes agrupados em classes
 class TestCustomErrorAbstract:
 
-    def setup_method(self):
-        self.error_props = {"code_error": 404, "message_error": "Not Found"}
-        self.custom_error = ConcreteCustomError()
-
     def test_init_props(self):
-        self.custom_error.init_props(self.error_props)
+        instance = ConcreteCustomError(
+            {"code_error": 404, "message_error": "Not Found"}
+        )
 
-        assert self.custom_error.code_error == 404
-        assert self.custom_error.message_error == "Not Found"
+        assert instance.code_error == 404
+        assert instance.message_error == "Not Found"
 
 
 class TestCustomError:
@@ -39,12 +37,9 @@ class TestCustomError:
             "message_error": "Bad Request",
         }
 
-        # Criação de instâncias de CustomErrorAbstract
-        self.custom_error_instance_1 = ConcreteCustomError()
-        self.custom_error_instance_1.init_props(self.error_props_1)
+        self.custom_error_instance_1 = ConcreteCustomError(self.error_props_1)
 
-        self.custom_error_instance_2 = ConcreteCustomError()
-        self.custom_error_instance_2.init_props(self.error_props_2)
+        self.custom_error_instance_2 = ConcreteCustomError(self.error_props_2)
 
     def test_single_instance(self):
         custom_error = CustomError(self.custom_error_instance_1)
