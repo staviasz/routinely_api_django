@@ -1,0 +1,81 @@
+from unittest import mock
+import pytest
+from main.errors.shared import (
+    CustomErrorAbstract,
+    InputObjectErrorType,
+    CustomError,
+)
+
+
+class ConcreteCustomError(CustomErrorAbstract):
+    def init_props(self, inputObjectError: InputObjectErrorType) -> None:
+        self._code_error = inputObjectError["code_error"]
+        self._message_error = inputObjectError["message_error"]
+
+
+# Testes agrupados em classes
+class TestCustomErrorAbstract:
+
+    def setup_method(self):
+        self.error_props = {"code_error": 404, "message_error": "Not Found"}
+        self.custom_error = ConcreteCustomError()
+
+    def test_init_props(self):
+        self.custom_error.init_props(self.error_props)
+
+        assert self.custom_error.code_error == 404
+        assert self.custom_error.message_error == "Not Found"
+
+
+class TestCustomError:
+
+    def setup_method(self):
+        self.error_props_1 = {
+            "code_error": 500,
+            "message_error": "Internal Server Error",
+        }
+        self.error_props_2 = {
+            "code_error": 400,
+            "message_error": "Bad Request",
+        }
+
+        # Criação de instâncias de CustomErrorAbstract
+        self.custom_error_instance_1 = ConcreteCustomError()
+        self.custom_error_instance_1.init_props(self.error_props_1)
+
+        self.custom_error_instance_2 = ConcreteCustomError()
+        self.custom_error_instance_2.init_props(self.error_props_2)
+
+    def test_single_instance(self):
+        custom_error = CustomError(self.custom_error_instance_1)
+
+        assert len(custom_error.errors) == 1
+        assert custom_error.errors[0].code_error == 500
+        assert custom_error.errors[0].message_error == "Internal Server Error"
+
+        formatted = custom_error.formated_errors
+        assert formatted["code_error"] == 500
+        assert formatted["messages_error"] == ["Internal Server Error"]
+
+    def test_list_of_instances(self):
+        custom_error = CustomError(
+            [self.custom_error_instance_1, self.custom_error_instance_2]
+        )
+
+        assert len(custom_error.errors) == 2
+        assert custom_error.errors[0].code_error == 500
+        assert custom_error.errors[1].code_error == 400
+
+        formatted = custom_error.formated_errors
+        assert formatted["code_error"] == 500
+        assert formatted["messages_error"] == [
+            "Internal Server Error",
+            "Bad Request",
+        ]
+
+    def test_invalid_construction(self):
+        with pytest.raises(TypeError):
+            CustomError("Invalid Error")  # Deve lançar TypeError
+
+        with pytest.raises(TypeError):
+            CustomError([self.custom_error_instance_1, "Invalid Error"])
