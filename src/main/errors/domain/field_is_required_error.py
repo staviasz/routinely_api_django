@@ -1,7 +1,7 @@
 from main.errors.shared import CustomErrorAbstract
 
 
-class FieldIsRequired(CustomErrorAbstract):
+class FieldIsRequiredError(CustomErrorAbstract):
     def __init__(self, field: str) -> None:
         self.__validate_constructor(field)
         super().__init__(code_error=400, message_error=f"The {field} is required.")

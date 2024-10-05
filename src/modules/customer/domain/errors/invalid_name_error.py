@@ -1,7 +1,7 @@
 from main.errors.shared import CustomErrorAbstract
 
 
-class InvalidName(CustomErrorAbstract):
+class InvalidNameError(CustomErrorAbstract):
     def __init__(self) -> None:
         super().__init__(
             code_error=400,

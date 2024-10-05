@@ -1,7 +1,7 @@
 import re
 from main.domain.value_objects.value_objects import ValueObject
-from main.errors.domain import FieldIsRequired
-from modules.customer.domain.errors import InvalidName
+from main.errors.domain import FieldIsRequiredError
+from modules.customer.domain.errors import InvalidNameError
 
 
 class NameValueObject(ValueObject[str]):
@@ -15,10 +15,10 @@ class NameValueObject(ValueObject[str]):
         name = props.strip()
 
         if not self.__has_name(name):
-            self._add_error(FieldIsRequired("name"))
+            self._add_error(FieldIsRequiredError("name"))
 
         if not self.__is_valid_name(name) or not self.__name_length_is_valid(name):
-            self._add_error(InvalidName())
+            self._add_error(InvalidNameError())
 
         self._raize_errors()
 
