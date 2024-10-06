@@ -97,3 +97,8 @@ class TestEntity:
                 "The value object should have at least 3 characters.",
             ],
         }
+
+    def test_valid_entity(self):
+        props = {"id": "550e8400-e29b-41d4-a716-446655440000", "name": "Test"}
+        entity = ConcreteEntity(props)
+        assert entity._errors() is None

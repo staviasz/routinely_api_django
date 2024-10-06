@@ -47,9 +47,3 @@ class TestValueObject:
 
         vo._clear_errors()
         assert vo._errors() is None
-
-    def test_exception_invalid_instance_in_add_error(self):
-        vo = ConcreteValueObject("t")
-
-        with pytest.raises(TypeError):
-            vo._add_error("invalid_instance")

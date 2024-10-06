@@ -10,7 +10,8 @@ from main.errors.shared import (
 class ConcreteCustomError(CustomErrorAbstract):
     def __init__(self, inputObjectError: InputObjectErrorType) -> None:
         super().__init__(
-            inputObjectError["code_error"], inputObjectError["message_error"]
+            inputObjectError["code_error"],
+            inputObjectError["message_error"],
         )
 
 

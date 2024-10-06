@@ -44,10 +44,13 @@ class Entity(ABC, Generic[T]):
         self, error: CustomErrorAbstract | list[CustomErrorAbstract]
     ) -> None:
         if isinstance(error, list):
-            self.__errors.extend(error)
+            for err in error:
+                if not self.__exists_error_in_list_errors(err):
+                    self.__errors.append(err)
             return
 
-        self.__errors.append(error)
+        if not self.__exists_error_in_list_errors(error):
+            self.__errors.append(error)
 
     def _clear_errors(self) -> None:
         self.__errors.clear()
@@ -73,6 +76,9 @@ class Entity(ABC, Generic[T]):
         errors = self._errors()
         if errors:
             raise CustomError(errors)
+
+    def __exists_error_in_list_errors(self, error: CustomErrorAbstract) -> bool:
+        return any(x.message_error == error.message_error for x in self.__errors)
 
     @abstractmethod
     def _validate(self, props: T) -> None:

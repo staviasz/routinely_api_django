@@ -53,10 +53,13 @@ class Aggregate(ABC, Generic[T]):
         self, error: CustomErrorAbstract | list[CustomErrorAbstract]
     ) -> None:
         if isinstance(error, list):
-            self._error_list.extend(error)
+            for err in error:
+                if not self.__exists_error_in_list_errors(err):
+                    self._error_list.append(err)
             return
 
-        self._error_list.append(error)
+        if not self.__exists_error_in_list_errors(error):
+            self._error_list.append(error)
 
     def _clear_errors(self) -> None:
         self._error_list.clear()
@@ -78,6 +81,9 @@ class Aggregate(ABC, Generic[T]):
         errors = self._errors()
         if errors:
             raise CustomError(errors)
+
+    def __exists_error_in_list_errors(self, error: CustomErrorAbstract) -> bool:
+        return any(x.message_error == error.message_error for x in self._error_list)
 
     @abstractmethod
     def _validate(self, props: T) -> None:

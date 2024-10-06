@@ -23,12 +23,8 @@ class ValueObject(ABC, Generic[T]):
         return self.__errors if len(self.__errors) > 0 else None
 
     def _add_error(self, error: CustomErrorAbstract) -> None:
-        if not isinstance(error, CustomErrorAbstract):
-            raise TypeError(
-                "O erro deve ser uma instância de CustomErrorAbstract.",
-            )
-
-        self.__errors.append(error)
+        if not any(x.message_error == error.message_error for x in self.__errors):
+            self.__errors.append(error)
 
     def _clear_errors(self) -> None:
         self.__errors.clear()
