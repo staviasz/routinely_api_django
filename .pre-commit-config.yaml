@@ -22,6 +22,6 @@ repos:
     hooks:
       - id: run-pytest
         name: run pytest
-        entry: ./run_test.sh
+        entry: pytest
         language: python  
         types: [python]
