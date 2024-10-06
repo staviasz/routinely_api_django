@@ -83,7 +83,6 @@ class Aggregate(ABC, Generic[T]):
             raise CustomError(errors)
 
     def __exists_error_in_list_errors(self, error: CustomErrorAbstract) -> bool:
-        print(error.message_error)
         return any(x.message_error == error.message_error for x in self._error_list)
 
     @abstractmethod
