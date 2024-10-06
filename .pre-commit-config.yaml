@@ -17,3 +17,11 @@ repos:
     hooks:
       - id: flake8
         stages: [pre-commit]
+  
+  - repo: local
+    hooks:
+      - id: run-pytest
+        name: run pytest
+        entry: ./run_test.sh
+        language: python  
+        types: [python]
