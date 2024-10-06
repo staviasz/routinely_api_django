@@ -1,2 +1,0 @@
-django-stubs==5.1.0
-Django==5.1.1
