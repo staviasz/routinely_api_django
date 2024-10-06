@@ -22,6 +22,6 @@ repos:
     hooks:
       - id: run-pytest
         name: run pytest
-        entry: pytest
+        entry: pytest src
         language: python  
         types: [python]
