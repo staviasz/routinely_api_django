@@ -25,3 +25,4 @@ repos:
         entry: python -m pytest src 
         language: python  
         types: [python]
+        additional_dependencies: [pytest]
