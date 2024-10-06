@@ -1,0 +1,3 @@
+from .name_value_object import NameValueObject
+from .email_value_object import EmailValueObject
+from .password_value_object import PasswordValueObject
