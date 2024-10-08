@@ -1,12 +1,7 @@
-from typing import Any, cast
+from typing import Any, TypedDict, cast
 import pytest
-from unittest.mock import MagicMock
-from main.domain.aggregates.aggregates import Aggregate, Props
-from main.domain.entities.entity import Entity
-from main.errors.domain import InvalidIdError
-from main.errors.shared import CustomErrorAbstract
-from main.adapters.uuidAdapter import UuidAdapter
-from main.errors.shared import CustomError
+from main.domain import Entity, Aggregate
+from main.errors import CustomErrorAbstract, CustomError
 
 
 class Error(CustomErrorAbstract):
@@ -15,15 +10,20 @@ class Error(CustomErrorAbstract):
         super().__init__(400, message_error)
 
 
-class Entity1(Entity[dict[str, Any]]):
-    def __init__(self, props: dict[str, Any]) -> None:
+class Entity1Props(TypedDict):
+    id: str
+    name: str
+
+
+class Entity1(Entity[Entity1Props]):
+    def __init__(self, props: Entity1Props) -> None:
         self._validate(props)
 
     @property
     def name(self) -> str:
         return str(self._name)
 
-    def _validate(self, props: dict[str, Any]) -> None:
+    def _validate(self, props: Entity1Props) -> None:
         self._clear_errors()
         self._create_id(props.get("id"), "Entity1")
 
@@ -39,15 +39,20 @@ class Entity1(Entity[dict[str, Any]]):
         self._name = props.get("name")
 
 
-class Entity2(Entity[dict[str, Any]]):
-    def __init__(self, props: dict[str, Any]) -> None:
+class Entity2Props(TypedDict):
+    id: str
+    age: int
+
+
+class Entity2(Entity[Entity2Props]):
+    def __init__(self, props: Entity2Props) -> None:
         self._validate(props)
 
     @property
     def age(self) -> int | None:
         return int(self._age) if self._age else None
 
-    def _validate(self, props: dict[str, Any]) -> None:
+    def _validate(self, props: Entity2Props) -> None:
         self._clear_errors()
         self._create_id(props.get("id"), "Entity2")
 
@@ -63,19 +68,34 @@ class Entity2(Entity[dict[str, Any]]):
         self._age = props.get("age")
 
 
-class ConcreteAggregate(Aggregate[dict[str, Any]]):
+class AggregateProps(TypedDict):
+    id: str
+    name: str
+    age: int
 
-    def __init__(self, props: dict[str, Any]) -> None:
+
+class ConcreteAggregate(Aggregate[AggregateProps]):
+
+    def __init__(self, props: AggregateProps) -> None:
         self._validate(props)
+        self.__props = props
 
-    def _validate(self, props: dict[str, Any]) -> None:
+    @property
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "id": self.id,
+            "entity1": {"id": self.id, "name": self.__props.get("name")},
+            "entity2": {"id": self.id, "age": self.__props.get("age")},
+        }
+
+    def _validate(self, props: AggregateProps) -> None:
         self._clear_errors()
         self._create_id(props.get("id"), "ConcreteAggregate")
 
         entity1 = {"id": props.get("id"), "name": props.get("name")}
         entity2 = {"id": props.get("id"), "age": props.get("age")}
 
-        entities = self._validate_entities(
+        self._validate_entities(
             [
                 {
                     "entity": Entity1,
@@ -89,15 +109,6 @@ class ConcreteAggregate(Aggregate[dict[str, Any]]):
         )
 
         self._raize_errors()
-
-        class_entity1 = cast(Entity1, entities[0])
-        class_entity2 = cast(Entity2, entities[1])
-
-        self.to_dict = {
-            "id": self.id,
-            "entity1": {"id": class_entity1.id, "name": class_entity1.name},
-            "entity2": {"id": class_entity2.id, "age": class_entity2.age},
-        }
 
 
 class TestAggregate:

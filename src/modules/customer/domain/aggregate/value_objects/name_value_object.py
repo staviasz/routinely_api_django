@@ -1,7 +1,7 @@
 import re
-from main.domain.value_objects.value_objects import ValueObject
-from main.errors.domain import FieldIsRequiredError
-from modules.customer.domain.errors import InvalidNameError
+from main.domain import ValueObject
+from main.errors import FieldIsRequiredError
+from modules.customer.domain import InvalidNameError
 
 
 class NameValueObject(ValueObject[str]):

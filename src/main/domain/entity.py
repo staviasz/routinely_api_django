@@ -1,53 +1,53 @@
 from abc import ABC, abstractmethod
-from typing import Generic, Literal, Optional, TypeVar, TypedDict, Union, Any
+from typing import (
+    Any,
+    Dict,
+    Generic,
+    Optional,
+    Type,
+    TypeVar,
+    TypedDict,
+    Union,
+    cast,
+)
 
 from main.adapters.uuidAdapter import UuidAdapter
-from main.domain.entities.entity import Entity
-from main.errors.domain import InvalidIdError
-from main.errors.shared import CustomError, CustomErrorAbstract
+from main.domain.value_objects import ValueObject
+from main.errors import InvalidIdError, CustomError, CustomErrorAbstract
 
 
-class OBJ(TypedDict):
+class OBJ(TypedDict, total=False):
     pass
 
 
-class Props(TypedDict, OBJ):
-    id: str
+T = TypeVar("T", bound=OBJ)  # type: ignore
 
 
-class EntityType(TypedDict):
-    entity: Entity
-    props: OBJ
+class ValueObjectType(TypedDict):
+    value_object: Type[ValueObject]
+    props: Union[OBJ, str, bool]
 
 
-T = TypeVar("T", bound=Props)
+class Entity(ABC, Generic[T]):
+    __errors: list[CustomErrorAbstract] = []
 
-
-class Aggregate(ABC, Generic[T]):
-    _error_list: list[CustomErrorAbstract] = []
-    _props: T
+    @abstractmethod
+    def __init__(self, props: T) -> None:
+        pass
 
     @property
     def id(self) -> str:
         return self.__id
 
-    @property
-    def to_dict(self) -> T:
-        return self._props
-
-    @to_dict.setter
-    def to_dict(self, props: T) -> None:
-        self._props = props
-
     def _create_id(self, id: Optional[str], origin: Optional[str]) -> None:
         if id and not UuidAdapter.validate_uuid4(id):
-            self._add_error(InvalidIdError(origin))
+            self._add_error(InvalidIdError(cast(str, origin)))
 
         self.__id = UuidAdapter.generate_uuid4() if not id else id
 
     def _errors(self) -> list[CustomErrorAbstract] | None:
 
-        return self._error_list if len(self._error_list) > 0 else None
+        return self.__errors if len(self.__errors) > 0 else None
 
     def _add_error(
         self, error: CustomErrorAbstract | list[CustomErrorAbstract]
@@ -55,22 +55,26 @@ class Aggregate(ABC, Generic[T]):
         if isinstance(error, list):
             for err in error:
                 if not self.__exists_error_in_list_errors(err):
-                    self._error_list.append(err)
+                    self.__errors.append(err)
             return
 
         if not self.__exists_error_in_list_errors(error):
-            self._error_list.append(error)
+            self.__errors.append(error)
 
     def _clear_errors(self) -> None:
-        self._error_list.clear()
+        self.__errors.clear()
 
-    def _validate_entities(self, entities: list[EntityType]) -> list[Entity]:
-        results: list[Entity] = []
+    def _validate_value_objects(
+        self,
+        entities: list[ValueObjectType],
+    ) -> list[ValueObject]:
+
+        results: list[ValueObject] = []
         for item in entities:
-            entity = item["entity"]
+            valueObject: Type[ValueObject] = item["value_object"]
             props = item["props"]
             try:
-                result = entity(props)
+                result = valueObject(props)
                 results.append(result)
             except CustomError as e:
                 self._add_error(e.errors)
@@ -83,7 +87,7 @@ class Aggregate(ABC, Generic[T]):
             raise CustomError(errors)
 
     def __exists_error_in_list_errors(self, error: CustomErrorAbstract) -> bool:
-        return any(x.message_error == error.message_error for x in self._error_list)
+        return any(x.message_error == error.message_error for x in self.__errors)
 
     @abstractmethod
     def _validate(self, props: T) -> None:

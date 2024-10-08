@@ -1,0 +1,1 @@
+from .usecases.register_usecase_contract import RegisterUsecaseContract

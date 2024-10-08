@@ -1,4 +1,4 @@
-from main.errors.shared import CustomErrorAbstract
+from main.errors import CustomErrorAbstract
 
 
 class InvalidAcceptedTermsError(CustomErrorAbstract):

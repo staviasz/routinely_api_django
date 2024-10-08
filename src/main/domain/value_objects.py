@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Generic, TypeVar, Union
-from main.errors.shared import CustomErrorAbstract, CustomError
+from main.errors import CustomErrorAbstract, CustomError
 
 
 _Props = Union[Dict[str, Any], str, bool]

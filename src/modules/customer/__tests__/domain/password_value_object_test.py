@@ -1,7 +1,7 @@
 import pytest
 
-from main.errors.shared import CustomError
-from modules.customer.domain.aggregate.value_objects import PasswordValueObject
+from main.errors import CustomError
+from modules.customer.domain import PasswordValueObject
 
 
 class TestPasswordValueObject:

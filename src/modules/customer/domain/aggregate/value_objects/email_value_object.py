@@ -1,6 +1,6 @@
 import re
-from main.domain.value_objects.value_objects import ValueObject
-from main.errors.domain import FieldIsRequiredError, InvalidFieldError
+from main.domain.value_objects import ValueObject
+from main.errors import FieldIsRequiredError, InvalidFieldError
 
 
 class EmailValueObject(ValueObject[str]):

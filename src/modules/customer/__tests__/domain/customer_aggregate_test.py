@@ -1,7 +1,6 @@
 import pytest
-from main.errors.shared import CustomError
-from modules.customer.domain.models import InputCustomerAggregateModel
-from .customer_aggregate import CustomerAggregate
+from main.errors import CustomError
+from modules.customer import InputCustomerAggregateModel, CustomerAggregate
 
 
 class TestCustomerAggregate:

@@ -1,6 +1,6 @@
 import pytest
-from main.errors.shared import CustomError
-from ..customer_entity import CustomerEntity
+from main.errors import CustomError
+from modules.customer.domain import CustomerEntity
 
 
 class TestCustomerEntity:

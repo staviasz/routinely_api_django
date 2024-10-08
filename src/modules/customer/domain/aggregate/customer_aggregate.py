@@ -1,6 +1,9 @@
-from main.domain.aggregates.aggregates import Aggregate
-from modules.customer.domain.aggregate.entities import AccountEntity, CustomerEntity
-from modules.customer.domain.models import InputCustomerAggregateModel
+from main.domain.aggregates import Aggregate
+from modules.customer.domain import (
+    InputCustomerAggregateModel,
+    AccountEntity,
+    CustomerEntity,
+)
 
 
 class CustomerAggregate(Aggregate):

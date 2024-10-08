@@ -1,7 +1,7 @@
 import pytest
 
-from main.errors.shared import CustomError
-from modules.customer.domain.aggregate.value_objects import EmailValueObject
+from main.errors import CustomError
+from modules.customer.domain import EmailValueObject
 
 
 class TestEmailValueObject:

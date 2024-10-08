@@ -1,8 +1,5 @@
-import pytest
-from main.domain.value_objects.value_objects import (
-    ValueObject,
-)
-from main.errors.shared import CustomErrorAbstract
+from main.domain import ValueObject
+from main.errors import CustomErrorAbstract
 
 
 class ErrorTest(CustomErrorAbstract):

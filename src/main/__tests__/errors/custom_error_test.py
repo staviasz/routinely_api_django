@@ -1,6 +1,5 @@
-from unittest import mock
 import pytest
-from main.errors.shared import (
+from main.errors import (
     CustomErrorAbstract,
     InputObjectErrorType,
     CustomError,

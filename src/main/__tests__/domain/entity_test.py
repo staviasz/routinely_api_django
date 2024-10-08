@@ -1,12 +1,10 @@
-from typing import Dict
+from typing import TypedDict
 
 import pytest
 
-from main.domain.value_objects.value_objects import ValueObject
-from main.errors.domain import InvalidIdError
-from main.errors.shared import CustomErrorAbstract
-from main.domain.entities.entity import Entity
-from main.errors.shared import CustomError
+from main.domain.value_objects import ValueObject
+from main.errors import CustomErrorAbstract, CustomError
+from main.domain import Entity
 
 
 class ErrorTest(CustomErrorAbstract):
@@ -30,11 +28,16 @@ class ConcreteValueObject(ValueObject[str]):
         self._raize_errors()
 
 
-class ConcreteEntity(Entity[Dict[str, str]]):
-    def __init__(self, props: Dict[str, str]) -> None:
+class ConcreteProps(TypedDict):
+    id: str | None
+    name: str
+
+
+class ConcreteEntity(Entity[ConcreteProps]):
+    def __init__(self, props: ConcreteProps) -> None:
         self._validate(props)
 
-    def _validate(self, props: Dict[str, str]) -> None:
+    def _validate(self, props: ConcreteProps) -> None:
         self._clear_errors()
 
         self._create_id(props.get("id"), "ConcreteEntity")

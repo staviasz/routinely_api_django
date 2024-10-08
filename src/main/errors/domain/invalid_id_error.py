@@ -1,4 +1,4 @@
-from main.errors.shared import CustomErrorAbstract
+from main.errors.shared.custom_error import CustomErrorAbstract
 
 
 class InvalidIdError(CustomErrorAbstract):

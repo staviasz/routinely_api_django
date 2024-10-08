@@ -1,6 +1,6 @@
 import pytest
-from main.errors.shared import CustomError
-from ..name_value_object import NameValueObject
+from main.errors import CustomError
+from modules.customer.domain import NameValueObject
 
 
 class TestNameValueObject:

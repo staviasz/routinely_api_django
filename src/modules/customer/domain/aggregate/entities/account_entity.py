@@ -1,9 +1,9 @@
-from main.domain.entities.entity import Entity
-from modules.customer.domain.aggregate.value_objects import (
+from main.domain.entity import Entity
+from modules.customer.domain import (
     EmailValueObject,
     PasswordValueObject,
 )
-from modules.customer.domain.models import InputAccountEntityModel
+from modules.customer.domain import InputAccountEntityModel
 
 
 class AccountEntity(Entity):
@@ -13,11 +13,11 @@ class AccountEntity(Entity):
 
     @property
     def email(self) -> str:
-        return self.__props.get("email")
+        return self.__props["email"]
 
     @property
     def password(self) -> str:
-        return self.__props.get("password")
+        return self.__props["password"]
 
     def _validate(self, props: InputAccountEntityModel) -> None:
         self._clear_errors()

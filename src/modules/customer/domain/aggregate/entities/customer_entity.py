@@ -1,8 +1,10 @@
-from main.domain.entities.entity import Entity
-from main.errors.domain import FieldIsRequiredError
-from modules.customer.domain.aggregate.value_objects import NameValueObject
-from modules.customer.domain.errors import InvalidAcceptedTermsError
-from modules.customer.domain.models import InputCustomerEntityModel
+from main.domain.entity import Entity
+from main.errors import FieldIsRequiredError
+from modules.customer.domain import (
+    NameValueObject,
+    InvalidAcceptedTermsError,
+    InputCustomerEntityModel,
+)
 
 
 class CustomerEntity(Entity[InputCustomerEntityModel]):
@@ -26,7 +28,7 @@ class CustomerEntity(Entity[InputCustomerEntityModel]):
             [{"value_object": NameValueObject, "props": props.get("name", "")}]
         )
 
-        self.__accepted_terms(props.get("accepted_terms"))
+        self.__accepted_terms(props.get("accepted_terms", False))
         self._raize_errors()
 
     def __accepted_terms(self, accepted_terms: bool) -> None:

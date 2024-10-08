@@ -1,7 +1,7 @@
 import pytest
 
-from main.errors.shared.custom_error import CustomError
-from modules.customer.domain.aggregate.entities import AccountEntity
+from main.errors import CustomError
+from modules.customer.domain import AccountEntity
 
 
 class TestAccoutEntity:
