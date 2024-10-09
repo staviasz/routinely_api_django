@@ -1,5 +1,16 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Generic, Optional, Type, TypeVar, TypedDict, Union, cast
+from typing import (
+    Any,
+    Dict,
+    Generic,
+    Literal,
+    Optional,
+    Type,
+    TypeVar,
+    TypedDict,
+    Union,
+    cast,
+)
 
 from main.adapters import UuidAdapter
 from main.domain.entity import Entity

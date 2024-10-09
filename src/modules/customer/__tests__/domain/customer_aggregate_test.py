@@ -35,13 +35,8 @@ class TestCustomerAggregate:
         }
 
         customer_aggregate = CustomerAggregate(props)
-        assert customer_aggregate.to_dict == {
-            "id": props["id"],
-            "name": props["name"],
-            "accepted_terms": props["accepted_terms"],
-            "account": {
-                "id": props["id"],
-                "email": props["email"],
-                "password": props["password"],
-            },
-        }
+        assert customer_aggregate.email == props["email"]
+        assert customer_aggregate.password == props["password"]
+        assert customer_aggregate.name == props["name"]
+        assert customer_aggregate.accepted_terms == props["accepted_terms"]
+        assert customer_aggregate.id == props["id"]

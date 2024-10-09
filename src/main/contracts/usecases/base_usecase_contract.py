@@ -1,5 +1,12 @@
-from abc import ABC, abstractmethod
-from typing import Any, Awaitable, Generic, Optional, TypeVar, TypedDict, Union
+from typing import (
+    Awaitable,
+    Generic,
+    Optional,
+    Protocol,
+    TypeVar,
+    TypedDict,
+    Union,
+)
 
 
 class OBJ(TypedDict):
@@ -10,10 +17,9 @@ Input = Union[OBJ, str, None]
 
 Output = Union[Awaitable[Optional[Input]], Optional[Input]]
 
-T = TypeVar("T", bound=Input)
+T = TypeVar("T", bound=Input, contravariant=True)
 
 
-class BaseUsecaseContract(ABC, Generic[T]):
-    @abstractmethod
+class BaseUsecaseContract(Protocol, Generic[T]):
     def perform(self, data: T) -> Output:
         pass

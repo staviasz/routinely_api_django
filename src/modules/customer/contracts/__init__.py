@@ -1,1 +1,2 @@
 from .usecases.register_usecase_contract import RegisterUsecaseContract
+from .infra.repository import CustomerRepositoryContract, RegisterRepositoryContract
