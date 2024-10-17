@@ -1,1 +1,2 @@
 from .repository_in_memory import RepositoryInMemory
+from .dispacher_events import DispatcherEvents
