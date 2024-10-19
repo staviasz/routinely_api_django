@@ -2,4 +2,5 @@ from typing import Protocol
 
 
 class ValidatorContract(Protocol):
-    pass
+    def __init__(self) -> bool:
+        pass
