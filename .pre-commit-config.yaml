@@ -17,6 +17,10 @@ repos:
     hooks:
       - id: flake8
         stages: [pre-commit]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: '' 
+    hooks:
+        -   id: mypy
   
   - repo: local
     hooks:
