@@ -1,5 +1,2 @@
-from typing import Protocol
-
-
-class ValidatorContract(Protocol):
-    pass
+def testando() -> bool:
+    return "True"
