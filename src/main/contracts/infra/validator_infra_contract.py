@@ -1,2 +1,5 @@
-def testando() -> bool:
-    return "True"
+from typing import Protocol
+
+
+class Testando(Protocol):
+    pass
