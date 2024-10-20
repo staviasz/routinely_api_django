@@ -2,4 +2,5 @@ from typing import Protocol
 
 
 class Testando(Protocol):
-    pass
+    def __init__(self) -> None:
+        pass
