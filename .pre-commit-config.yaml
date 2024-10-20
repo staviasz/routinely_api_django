@@ -19,17 +19,16 @@ repos:
         stages: [pre-commit]
   
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.12.0' 
+    rev: 'v1.12.1' 
     hooks:
         - id: mypy
-          args: [src]
           always_run: true
   
   - repo: local
     hooks:
     - id: pytest
       name: pytest
-      entry: ./venv/bin/pytest ./src
+      entry: /bin/zsh -c './venv/bin/pytest ./src'
       language: system
       types: [python]
       pass_filenames: false
