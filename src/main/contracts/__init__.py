@@ -9,4 +9,4 @@ from .infra.event_infra_contract import (
     HandlerContract,
     DispatcherContract,
 )
-from .infra.validator_infra_contract import Testando
+from .infra.validator_infra_contract import ValidatorContract

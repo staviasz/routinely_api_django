@@ -1,6 +1,13 @@
-from typing import Protocol
+from typing import Protocol, Dict, Any, Type, TypeVar
+
+from pydantic import BaseModel
+
+T = TypeVar("T", bound=BaseModel, covariant=True)
 
 
-class Testando(Protocol):
-    def __init__(self) -> None:
+class ValidatorContract(Protocol[T]):
+    def validate(self, props: Dict[str, Any]) -> T:
+        pass
+
+    def to_dict(self) -> T:
         pass

@@ -1,1 +1,2 @@
 from .usecases.register_usecase import RegisterUsecase
+from .controllers.register_customer_controller import RegisterCustomerController
