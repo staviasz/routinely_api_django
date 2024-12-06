@@ -48,7 +48,7 @@ class CustomError(Exception):
         return self.__props
 
     @property
-    def formated_errors(self) -> OutputObjectErrorType:
+    def formate_errors(self) -> OutputObjectErrorType:
         return {
             "code_error": self.__props[0].code_error,
             "messages_error": [error.message_error for error in self.__props],

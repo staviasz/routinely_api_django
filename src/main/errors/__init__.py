@@ -8,4 +8,4 @@ from .shared.custom_error import (
     InputObjectErrorType,
     CustomErrorAbstract,
 )
-from .shared.conflit_error import ConflitError
+from .shared.conflict_error import ConflictError

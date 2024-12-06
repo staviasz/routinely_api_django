@@ -3,30 +3,15 @@ import pytest
 from datetime import datetime
 from typing import Any, Awaitable, Union
 
-from main.contracts import EventContract, HandlerContract
+from main.contracts import EventBaseClass, HandlerContract
 from main.errors import CustomError
 from main.infra import DispatcherEvents
 
 
-def create_event(name: str) -> EventContract:
-    class EventStub(EventContract):
+def create_event(name: str) -> EventBaseClass:
+    class EventStub(EventBaseClass):
         def __init__(self, name: str) -> None:
-            self.__name = name
-            self.__payload: dict[str, Any] = {}
-            self.__datetime: datetime
-
-        def get_name(self) -> str:
-            return self.__name
-
-        def get_payload(self) -> dict[str, Any]:
-            return self.__payload
-
-        def set_payload(self, payload: dict[str, Any]) -> None:
-            self.__payload = payload
-            self.__datetime = datetime.now()
-
-        def get_datetime(self) -> datetime:
-            return self.__datetime
+            super().__init__(name)
 
     return EventStub(name)
 
@@ -36,7 +21,7 @@ def create_handler() -> HandlerContract:
         def __init__(self) -> None:
             pass
 
-        def handle(self, event: EventContract) -> Union[Awaitable[None], None]:
+        def handle(self, event: EventBaseClass) -> None:
             pass
 
     return HandlerStub()
@@ -73,7 +58,7 @@ class TestDispatcherEvents:
             self.dispatcher.register(self.event1.get_name(), self.handler1)
 
         custom_error = e.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 409,
             "messages_error": [
                 f"Handler already registered for {self.event1.get_name()}.",

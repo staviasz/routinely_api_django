@@ -9,8 +9,8 @@ class TestNameValueObject:
             NameValueObject("")
 
         custom_error = error.value
-        print(custom_error.formated_errors)
-        assert custom_error.formated_errors == {
+        print(custom_error.formate_errors)
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "The name is required.",
@@ -23,7 +23,7 @@ class TestNameValueObject:
             NameValueObject("T")
 
         custom_error = error.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "The name must be between 3 and 70 characters and only letters"
@@ -35,7 +35,7 @@ class TestNameValueObject:
             NameValueObject("Teste1")
 
         custom_error = error.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "The name must be between 3 and 70 characters and only letters"

@@ -1,17 +1,20 @@
 from unittest.mock import Mock
+
+import pytest
 from main.infra import BaseValidationPydantic
 from modules.customer.app import RegisterCustomerController
 from modules.customer.contracts import RegisterUsecaseContract
 from modules.customer.infra import RegisterCustomerSchema
 
 usecase = Mock(spec=RegisterUsecaseContract)
-validor = BaseValidationPydantic(RegisterCustomerSchema)
-controller = RegisterCustomerController(usecase=usecase, validator=validor)
+validator = BaseValidationPydantic(RegisterCustomerSchema)
+controller = RegisterCustomerController(usecase=usecase, validator=validator)
 
 
+@pytest.mark.asyncio
 class TestRegisterCustomerController:
-    def test_no_body_in_request(self):
-        response = controller.execute({})
+    async def test_no_body_in_request(self):
+        response = await controller.execute({})
 
         assert response["status"] == 400
         assert response["body"] == {
@@ -24,8 +27,8 @@ class TestRegisterCustomerController:
             ]
         }
 
-    def test_invalid_data(self):
-        response = controller.execute(
+    async def test_invalid_data(self):
+        response = await controller.execute(
             {
                 "body": {
                     "name": "in",
@@ -49,8 +52,8 @@ class TestRegisterCustomerController:
             ]
         }
 
-    def test_different_passwords(self):
-        response = controller.execute(
+    async def test_different_passwords(self):
+        response = await controller.execute(
             {
                 "body": {
                     "name": "valid",
@@ -66,7 +69,7 @@ class TestRegisterCustomerController:
         print(response)
         assert response["body"] == {"message": ["Passwords: are not equal"]}
 
-    def test_call_usecase(self):
+    async def test_call_usecase(self):
         data = {
             "name": "valid",
             "email": "test@test.com",
@@ -74,11 +77,11 @@ class TestRegisterCustomerController:
             "confirmed_password": "@Teste123",
             "accepted_terms": True,
         }
-        controller.execute({"body": data})
+        await controller.execute({"body": data})
 
         usecase.perform.assert_called_once_with({**data})
 
-    def test_success(self):
+    async def test_success(self):
         data = {
             "name": "valid",
             "email": "test@test.com",
@@ -86,7 +89,7 @@ class TestRegisterCustomerController:
             "confirmed_password": "@Teste123",
             "accepted_terms": True,
         }
-        response = controller.execute({"body": data})
+        response = await controller.execute({"body": data})
 
         usecase.perform.assert_called_with({**data})
         assert response["status"] == 204

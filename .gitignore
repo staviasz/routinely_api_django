@@ -3,3 +3,5 @@
 venv
 htmlcov
 .coverage
+.mypy_cache
+create_secret_keys.py

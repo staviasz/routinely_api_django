@@ -25,7 +25,7 @@ class BaseValidationPydantic(ValidatorContract[T]):
     def __format_error_to_messages(self, error: Exception) -> CustomError:
         str_error = str(error).split("\n")
         ignore_values_in_error = ["validation error", "For further information visit"]
-        formated_errors: list[CustomErrorAbstract] = []
+        formate_errors: list[CustomErrorAbstract] = []
         field_temp: str = ""
 
         for line in str_error:
@@ -36,7 +36,7 @@ class BaseValidationPydantic(ValidatorContract[T]):
                 field_temp = line
                 continue
 
-            formated_errors.append(
+            formate_errors.append(
                 self.__create_instance_error(
                     code_error=400,
                     message_error=self.__fomat_message_error(
@@ -44,7 +44,7 @@ class BaseValidationPydantic(ValidatorContract[T]):
                     ),
                 )
             )
-        return CustomError(formated_errors)
+        return CustomError(formate_errors)
 
     def __create_instance_error(
         self, code_error: int, message_error: str

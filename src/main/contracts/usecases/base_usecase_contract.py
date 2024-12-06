@@ -21,5 +21,5 @@ T = TypeVar("T", bound=Input, contravariant=True)
 
 
 class BaseUsecaseContract(Protocol, Generic[T]):
-    def perform(self, data: T) -> Output:
+    async def perform(self, data: T) -> Output:
         pass

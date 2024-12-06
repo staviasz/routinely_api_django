@@ -27,7 +27,7 @@ class TestSchemaBase:
             schema.validate(props)
 
         assert isinstance(e.value, CustomError)
-        assert e.value.formated_errors == {
+        assert e.value.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "name: String should have at least 3 characters",
@@ -41,7 +41,7 @@ class TestSchemaBase:
             schema.validate(props)
 
         assert isinstance(e.value, CustomError)
-        assert e.value.formated_errors == {
+        assert e.value.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "name: String should have at least 3 characters",
@@ -54,7 +54,7 @@ class TestSchemaBase:
             schema.validate({})
 
         assert isinstance(e.value, CustomError)
-        assert e.value.formated_errors == {
+        assert e.value.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "name: Field required",

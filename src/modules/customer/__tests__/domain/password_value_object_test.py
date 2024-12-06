@@ -10,7 +10,7 @@ class TestPasswordValueObject:
             PasswordValueObject("")
 
         custom_error = error.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "The password is required.",
@@ -23,7 +23,7 @@ class TestPasswordValueObject:
             PasswordValueObject("Teste1")
 
         custom_error = error.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "The password must contain at least one uppercase letter, one lowercase letter, one special character, one number and be at least 6 characters long",

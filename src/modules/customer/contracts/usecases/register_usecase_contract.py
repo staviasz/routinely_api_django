@@ -6,5 +6,5 @@ from modules.customer.domain import InputCustomerAggregateModel
 
 class RegisterUsecaseContract(BaseUsecaseContract[InputCustomerAggregateModel]):
     @abstractmethod
-    def perform(self, data: InputCustomerAggregateModel) -> None:
+    async def perform(self, data: InputCustomerAggregateModel) -> None:
         pass

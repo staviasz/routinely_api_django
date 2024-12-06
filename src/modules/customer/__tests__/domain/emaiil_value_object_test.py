@@ -10,7 +10,7 @@ class TestEmailValueObject:
             EmailValueObject("")
 
         custom_error = e.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "The email is required.",
@@ -23,7 +23,7 @@ class TestEmailValueObject:
             EmailValueObject("teste")
 
         custom_error = e.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": ["The email is invalid."],
         }

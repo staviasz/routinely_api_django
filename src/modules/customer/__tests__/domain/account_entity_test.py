@@ -10,7 +10,7 @@ class TestAccoutEntity:
             AccountEntity({"id": "None"})
 
         custom_error = e.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "The id in AccountEntity is invalid.",

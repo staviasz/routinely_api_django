@@ -48,7 +48,7 @@ class TestCustomError:
         assert custom_error.errors[0].code_error == 500
         assert custom_error.errors[0].message_error == "Internal Server Error"
 
-        formatted = custom_error.formated_errors
+        formatted = custom_error.formate_errors
         assert formatted["code_error"] == 500
         assert formatted["messages_error"] == ["Internal Server Error"]
 
@@ -61,7 +61,7 @@ class TestCustomError:
         assert custom_error.errors[0].code_error == 500
         assert custom_error.errors[1].code_error == 400
 
-        formatted = custom_error.formated_errors
+        formatted = custom_error.formate_errors
         assert formatted["code_error"] == 500
         assert formatted["messages_error"] == [
             "Internal Server Error",

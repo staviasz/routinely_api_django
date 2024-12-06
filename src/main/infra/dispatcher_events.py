@@ -1,7 +1,6 @@
-from typing import cast
 from main.contracts import DispatcherContract
 from main.contracts import HandlerContract
-from main.errors import CustomError, ConflitError
+from main.errors import CustomError, ConflictError
 
 
 class DispatcherEvents(DispatcherContract):
@@ -14,7 +13,7 @@ class DispatcherEvents(DispatcherContract):
     def register(self, name, handler):
         if self.has(name, handler):
             raise CustomError(
-                ConflitError(message_error=f"Handler already registered for {name}.")
+                ConflictError(message_error=f"Handler already registered for {name}.")
             )
         return self.__handlers_dict.setdefault(name, []).append(handler)
 

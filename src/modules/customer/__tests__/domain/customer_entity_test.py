@@ -9,7 +9,7 @@ class TestCustomerEntity:
             CustomerEntity({"id": "None", "name": "T", "accepted_terms": False})
 
         custom_error = e.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "The id in CustomerEntity is invalid.",
@@ -23,7 +23,7 @@ class TestCustomerEntity:
             CustomerEntity({"name": "Teste", "accepted_terms": "False"})
 
         custom_error = e.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": ["The accepted_terms is required."],
         }

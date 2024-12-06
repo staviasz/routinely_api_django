@@ -1,23 +1,30 @@
+from abc import ABC
 from datetime import datetime
-from typing import Any, Awaitable, List, Protocol, TypedDict, Union
+from typing import Any, Awaitable, List, Protocol, Union
 
 
-class EventContract(Protocol):
+class EventBaseClass(ABC):
+    def __init__(self, name: str) -> None:
+        self.__name = name
+        self.__payload: dict[str, Any] = {}
+        self.__datetime: datetime
+
     def get_name(self) -> str:
-        pass
+        return self.__name
 
     def get_payload(self) -> dict[str, Any]:
-        pass
+        return self.__payload
 
     def set_payload(self, payload: dict[str, Any]) -> None:
-        pass
+        self.__payload = payload
+        self.__datetime = datetime.now()
 
     def get_datetime(self) -> datetime:
-        pass
+        return self.__datetime
 
 
 class HandlerContract(Protocol):
-    def handle(self, event: EventContract) -> Union[Awaitable[None], None]:
+    def handle(self, event: EventBaseClass) -> None:
         pass
 
 
@@ -28,7 +35,7 @@ class DispatcherContract(Protocol):
     def register(self, name: str, handler: HandlerContract) -> None:
         pass
 
-    def dispatch(self, event: EventContract) -> None:
+    def dispatch(self, event: EventBaseClass) -> None:
         pass
 
     def remove(self, name: str, handler: HandlerContract) -> None:

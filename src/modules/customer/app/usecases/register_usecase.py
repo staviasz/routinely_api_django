@@ -1,4 +1,5 @@
-from main.errors import CustomError, ConflitError
+from main.contracts import EventBaseClass, DispatcherContract
+from main.errors import CustomError, ConflictError
 from modules.customer.contracts import (
     RegisterUsecaseContract,
     RegisterRepositoryContract,
@@ -7,16 +8,26 @@ from modules.customer.domain import InputCustomerAggregateModel, CustomerAggrega
 
 
 class RegisterUsecase(RegisterUsecaseContract):
-    def __init__(self, repository: RegisterRepositoryContract) -> None:
+    def __init__(
+        self,
+        repository: RegisterRepositoryContract,
+        event: EventBaseClass,
+        dispatcher: DispatcherContract,
+    ) -> None:
         self.repository = repository
+        self.event = event
+        self.dispatcher = dispatcher
 
-    def perform(self, data: InputCustomerAggregateModel) -> None:
+    async def perform(self, data: InputCustomerAggregateModel) -> None:
         aggregate_customer = CustomerAggregate(data)
 
         email = aggregate_customer.email
         has_email_in_use = self.repository.find_field_or_none("email", email)
         if has_email_in_use:
-            raise CustomError(ConflitError("email"))
+            raise CustomError(ConflictError("email"))
 
         self.repository.create(aggregate_customer)
+        self.event.set_payload({"name": aggregate_customer.name, "email": email})
+        self.dispatcher.dispatch(self.event)
+
         return

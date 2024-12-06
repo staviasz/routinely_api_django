@@ -5,8 +5,9 @@ from .infra.repository_infra_contract import (
     CreateContract,
 )
 from .infra.event_infra_contract import (
-    EventContract,
+    EventBaseClass,
     HandlerContract,
     DispatcherContract,
 )
 from .infra.validator_infra_contract import ValidatorContract
+from .infra.mailing_contract import MailingContract

@@ -2,26 +2,35 @@ from unittest.mock import patch
 import pytest
 from main.errors import CustomError
 from main.infra import RepositoryInMemory
+from main.infra.dispatcher_events import DispatcherEvents
 from modules.customer.app import RegisterUsecase
 from modules.customer.domain import CustomerAggregate
+from modules.customer.events.events_customer import CreatedCustomerEvent
 
 
 class CustomerRepositoryInMemory(RepositoryInMemory[CustomerAggregate]):
     pass
 
 
+@pytest.mark.asyncio
 class TestRegisterUsecase:
     def setup_method(self):
         self.repository = CustomerRepositoryInMemory()
-        self.usecase = RegisterUsecase(self.repository)
+        self.event = CreatedCustomerEvent()
+        self.dispatcher = DispatcherEvents()
+        self.usecase = RegisterUsecase(
+            self.repository,
+            self.event,
+            self.dispatcher,
+        )
 
-    def test_invalid_data(self):
+    async def test_invalid_data(self):
 
         with pytest.raises(CustomError) as e:
-            self.usecase.perform({})
+            await self.usecase.perform({})
 
         custom_error = e.value
-        assert custom_error.formated_errors == {
+        assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
                 "The name is required.",
@@ -34,7 +43,7 @@ class TestRegisterUsecase:
             ],
         }
 
-    def test_email_exists(self):
+    async def test_email_exists(self):
         data = {
             "name": "Teste",
             "email": "G0s7B@example.com",
@@ -46,12 +55,29 @@ class TestRegisterUsecase:
 
         with patch.object(self.repository, "find_field_or_none") as mock_perform:
             with pytest.raises(CustomError) as e:
-                self.usecase.perform(data)
+                await self.usecase.perform(data)
 
             custom_error = e.value
-            assert custom_error.formated_errors == {
+            assert custom_error.formate_errors == {
                 "code_error": 409,
-                "messages_error": ["Conflit: The email already exists."],
+                "messages_error": ["Conflict: The email already exists."],
             }
 
             mock_perform.assert_called_once_with("email", "G0s7B@example.com")
+
+    async def test_set_payload(self):
+        data = {
+            "name": "Teste",
+            "email": "G0s7B@example.com",
+            "password": "@Teste123",
+            "accepted_terms": True,
+        }
+
+        assert self.event.get_payload() == {}
+
+        await self.usecase.perform(data)
+
+        assert self.event.get_payload() == {
+            "name": "Teste",
+            "email": "G0s7B@example.com",
+        }
