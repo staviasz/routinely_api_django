@@ -13,14 +13,14 @@ class OBJ(TypedDict):
     pass
 
 
-Input = Union[OBJ, str, None]
+Input = Union[OBJ, dict, str, None]
 
-Output = Union[Awaitable[Optional[Input]], Optional[Input]]
+Output = Awaitable[Optional[Input]] | Optional[Input]
 
 T = TypeVar("T", bound=Input, contravariant=True)
 U = TypeVar("U", bound=Output, covariant=True)
 
 
-class BaseUsecaseContract(Protocol, Generic[T, U]):
-    async def perform(self, data: T) -> U:
+class BaseServiceContract(Protocol, Generic[T, U]):
+    async def handle(self, data: T) -> U:
         pass

@@ -6,6 +6,7 @@ from main.infra.dispatcher_events import DispatcherEvents
 from modules.customer.app import RegisterUsecase
 from modules.customer.domain import CustomerAggregate
 from modules.customer.events.events_customer import CreatedCustomerEvent
+from modules.customer.infra.crypto.hash import HashAdapter
 
 
 class CustomerRepositoryInMemory(RepositoryInMemory[CustomerAggregate]):
@@ -16,10 +17,12 @@ class CustomerRepositoryInMemory(RepositoryInMemory[CustomerAggregate]):
 class TestRegisterUsecase:
     def setup_method(self):
         self.repository = CustomerRepositoryInMemory()
+        self.hash = HashAdapter()
         self.event = CreatedCustomerEvent()
         self.dispatcher = DispatcherEvents()
         self.usecase = RegisterUsecase(
             self.repository,
+            self.hash,
             self.event,
             self.dispatcher,
         )
@@ -81,3 +84,16 @@ class TestRegisterUsecase:
             "name": "Teste",
             "email": "G0s7B@example.com",
         }
+
+    async def test_call_hash(self):
+        password = "@Teste123"
+        data = {
+            "name": "Teste",
+            "email": "G0s7B@example.com",
+            "password": password,
+            "accepted_terms": True,
+        }
+
+        with patch.object(self.hash, "hash") as mock_hash:
+            await self.usecase.perform(data)
+            mock_hash.assert_called_once_with(password)

@@ -1,7 +1,7 @@
 # models
 from .models.input_account_entity_model import InputAccountEntityModel
-from .models.input_customer_aggregate_model import InputCustomerAggregateModel
 from .models.input_customer_entity_model import InputCustomerEntityModel
+from .models.input_customer_aggregate_model import InputCustomerAggregateModel
 
 # erros
 from .errors.invalid_name_error import InvalidNameError

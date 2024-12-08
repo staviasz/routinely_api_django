@@ -33,11 +33,15 @@ class Entity(ABC, Generic[T]):
 
     @abstractmethod
     def __init__(self, props: T) -> None:
+        self.__props = props
         pass
 
     @property
     def id(self) -> str:
         return self.__id
+
+    def to_dict(self) -> T:
+        return self.__props
 
     def _create_id(self, id: Optional[str], origin: Optional[str]) -> None:
         if id and not UuidAdapter.validate_uuid4(id):

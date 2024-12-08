@@ -32,9 +32,16 @@ T = TypeVar("T", bound=OBJ)
 class Aggregate(ABC, Generic[T]):
     _error_list: list[CustomErrorAbstract] = []
 
+    def __init__(self, props: T) -> None:
+        self.__props = props
+
     @property
     def id(self) -> str:
         return self.__id
+
+    @property
+    def to_dict(self) -> T:
+        return self.__props
 
     def _create_id(self, id: Optional[str], origin: Optional[str]) -> None:
         if id and not UuidAdapter.validate_uuid4(id):

@@ -16,7 +16,8 @@ class SendEmailCustomer(TypedDict):
 class Backend(TypedDict):
     port: int
     url: str
-    secret_jwt: str
+    private_key_jwt: str
+    public_key_jwt: str
 
 
 class EnvTyped(TypedDict):
@@ -33,6 +34,7 @@ env: EnvTyped = {
     "backend": {
         "port": int(os.getenv("BACKEND_PORT", 8080)),
         "url": os.getenv("BACKEND_URL", ""),
-        "secret_jwt": os.getenv("BACKEND_SECRET_JWT", ""),
+        "private_key_jwt": os.getenv("BACKEND_PRIVATE_KEY_JWT", ""),
+        "public_key_jwt": os.getenv("BACKEND_PUBLIC_KEY_JWT", ""),
     },
 }

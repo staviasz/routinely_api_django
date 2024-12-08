@@ -27,10 +27,15 @@ class CustomerAggregate(Aggregate):
     def password(self) -> str:
         return self.__props["password"]
 
+    @password.setter
+    def password(self, password: str) -> None:
+        self.__props["password"] = password
+
     def _validate(self, props: InputCustomerAggregateModel) -> None:
         self._clear_errors()
 
         self._create_id(props.get("id"), "CustomerAggregate")
+        print(props)
 
         props_customer = {
             "id": self.id,

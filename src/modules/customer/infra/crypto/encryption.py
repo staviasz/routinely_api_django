@@ -2,8 +2,10 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 import os
 
+from modules.customer.contracts import EncryptionContract
 
-class EncryptionAdapter:
+
+class EncryptionAdapter(EncryptionContract):
     def __init__(self, crypto_secret_key: str):
         self.crypto_secret_key = crypto_secret_key.encode("utf-8")
 

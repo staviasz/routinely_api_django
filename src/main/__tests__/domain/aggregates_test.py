@@ -18,6 +18,7 @@ class Entity1Props(TypedDict):
 class Entity1(Entity[Entity1Props]):
     def __init__(self, props: Entity1Props) -> None:
         self._validate(props)
+        super().__init__(props)
 
     @property
     def name(self) -> str:
@@ -47,6 +48,7 @@ class Entity2Props(TypedDict):
 class Entity2(Entity[Entity2Props]):
     def __init__(self, props: Entity2Props) -> None:
         self._validate(props)
+        super().__init__(props)
 
     @property
     def age(self) -> int | None:
@@ -70,30 +72,22 @@ class Entity2(Entity[Entity2Props]):
 
 class AggregateProps(TypedDict):
     id: str
-    name: str
-    age: int
+    entity1: Entity1Props
+    entity2: Entity2Props
 
 
 class ConcreteAggregate(Aggregate[AggregateProps]):
 
     def __init__(self, props: AggregateProps) -> None:
         self._validate(props)
-        self.__props = props
-
-    @property
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "id": self.id,
-            "entity1": {"id": self.id, "name": self.__props.get("name")},
-            "entity2": {"id": self.id, "age": self.__props.get("age")},
-        }
+        super().__init__(props)
 
     def _validate(self, props: AggregateProps) -> None:
         self._clear_errors()
         self._create_id(props.get("id"), "ConcreteAggregate")
 
-        entity1 = {"id": props.get("id"), "name": props.get("name")}
-        entity2 = {"id": props.get("id"), "age": props.get("age")}
+        entity1 = {"id": props["entity1"]["id"], "name": props["entity1"]["name"]}
+        entity2 = {"id": props["entity2"]["id"], "age": props["entity2"]["age"]}
 
         self._validate_entities(
             [
@@ -114,7 +108,11 @@ class ConcreteAggregate(Aggregate[AggregateProps]):
 class TestAggregate:
     def test_create_id_valid_uuid(self):
         id = "550e8400-e29b-41d4-a716-446655440000"
-        props = {"id": id, "name": "John", "age": 18}
+        props = {
+            "id": id,
+            "entity1": {"id": id, "name": "John"},
+            "entity2": {"id": id, "age": 18},
+        }
         aggregate = ConcreteAggregate(props)
         assert aggregate._errors() is None
         assert aggregate.id == id
@@ -125,18 +123,29 @@ class TestAggregate:
         }
 
     def test_create_id_no_uuid(self):
-        props = {"id": None, "entity1": "John", "entity2": 18}
+        id = None
+        props = {
+            "id": id,
+            "entity1": {"id": id, "name": "John"},
+            "entity2": {"id": id, "age": 18},
+        }
         aggregate = ConcreteAggregate(props)
         assert aggregate._errors() is None
         assert aggregate.id is not None
 
     def test_raise_error(self):
-        props = {"id": "None", "name": "Jo", "age": 18}
+        id = "None"
+        props = {
+            "id": id,
+            "entity1": {"id": id, "name": "Jo"},
+            "entity2": {"id": id, "age": 18},
+        }
 
         with pytest.raises(CustomError) as e:
             ConcreteAggregate(props)
 
         custom_error = e.value
+        print(custom_error.formate_errors)
         assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
