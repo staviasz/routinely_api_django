@@ -1,11 +1,15 @@
+from datetime import datetime, timedelta
 from typing import Optional, TypedDict
 
 from main.domain.entity import Entity
+from modules.auth.domain.errors.require_user_id import RequireUserIdError
 
 
-class SessionModel(TypedDict):
+class SessionModel(TypedDict, total=False):
     id: Optional[str]
-    token: str
+    user_id: str
+    created_at: Optional[datetime]
+    expires_at: Optional[datetime]
 
 
 class SessionEntity(Entity[SessionModel]):
@@ -15,5 +19,14 @@ class SessionEntity(Entity[SessionModel]):
 
     def _validate(self, props: SessionModel) -> None:
         self._clear_errors()
-        self._create_id(props.get("id"), "SessionEntity")
+
+        if not props.get("user_id"):
+            self._add_error(RequireUserIdError())
+
+        self._create_id()
+
+        current_time = datetime.now()
+        props["created_at"] = current_time
+        props["expires_at"] = current_time + timedelta(days=7)
+
         self._raize_errors()

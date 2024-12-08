@@ -2,7 +2,7 @@ from unittest.mock import Mock, patch
 import pytest
 from main.errors.shared.custom_error import CustomError
 from main.infra.repository_in_memory import RepositoryInMemory
-from modules.auth import CreateSessionServiceContract
+from modules.auth import SessionServiceContract
 from modules.customer import LoginUsecase, CustomerAggregate, HashAdapter
 
 
@@ -10,7 +10,7 @@ class LoginRepositoryInMemory(RepositoryInMemory[CustomerAggregate]):
     pass
 
 
-authMock = Mock(spec=CreateSessionServiceContract)
+authMock = Mock(spec=SessionServiceContract)
 
 
 @pytest.mark.asyncio

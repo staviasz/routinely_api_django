@@ -5,9 +5,7 @@ from modules.auth.domain import SessionEntity
 T = SessionEntity
 
 
-class CreateSessionRepositoryContract(
-    CreateContract[T], FindFieldOrNoneContract[T], DeleteContract[T]
-):
+class CreateSessionRepositoryContract(CreateContract[T]):
     pass
 
 

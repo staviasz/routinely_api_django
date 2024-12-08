@@ -9,3 +9,5 @@ from .shared.custom_error import (
     CustomErrorAbstract,
 )
 from .shared.conflict_error import ConflictError
+from .shared.bad_request_error import BadRequestError
+from .shared.not_found_error import NotFoundError

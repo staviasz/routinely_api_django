@@ -1,8 +1,14 @@
 from typing import Optional, TypedDict
 
 
-class SessionInput(TypedDict):
-    id: str
+class SessionTokens(TypedDict):
+    access_token: str
+    refresh_token: str
+
+
+class SessionInput(TypedDict, total=False):
+    user_id: Optional[str]
+    tokens: Optional[SessionTokens]
 
 
 class SessionOutput(TypedDict):

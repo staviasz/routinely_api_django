@@ -1,6 +1,6 @@
 from typing import Any, cast
 from main.errors.shared.custom_error import CustomError
-from modules.auth.contracts import CreateSessionServiceContract
+from modules.auth.contracts import SessionServiceContract
 from modules.customer.app import UnauthorizedError
 from modules.customer.types import LoginInput, LoginOutput
 from modules.customer.contracts import (
@@ -14,7 +14,7 @@ class LoginUsecase(LoginUsecaseContract):
     def __init__(
         self,
         repository: LoginRepositoryContract,
-        auth: CreateSessionServiceContract,
+        auth: SessionServiceContract,
         hash: HashContract,
     ) -> None:
         self.repository = repository
