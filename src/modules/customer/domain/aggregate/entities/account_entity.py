@@ -1,4 +1,5 @@
-from main.domain.entity import Entity
+from typing import cast
+from main.domain.entity import Entity, ValueObjectType
 from modules.customer.domain import (
     EmailValueObject,
     PasswordValueObject,
@@ -21,8 +22,8 @@ class AccountEntity(Entity):
 
     def _validate(self, props: InputAccountEntityModel) -> None:
         self._clear_errors()
-
         self._create_id(props.get("id"), "AccountEntity")
+
         self._validate_value_objects(
             [
                 {"value_object": EmailValueObject, "props": props.get("email", "")},

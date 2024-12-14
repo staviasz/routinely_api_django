@@ -1,1 +1,2 @@
 from .register_customer import register_customer_template
+from .forget_password import forget_password_template

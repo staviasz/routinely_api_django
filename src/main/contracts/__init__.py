@@ -5,6 +5,7 @@ from .infra.repository_infra_contract import (
     CreateContract,
     FindFieldContract,
     DeleteContract,
+    UpdateContract,
 )
 from .infra.event_infra_contract import (
     EventBaseClass,

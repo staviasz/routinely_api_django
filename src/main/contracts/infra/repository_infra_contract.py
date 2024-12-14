@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from typing import Generic, Optional, Protocol, TypeVar, Union
 
 from main.domain.aggregates import Aggregate
@@ -29,4 +28,9 @@ class DeleteContract(Protocol, Generic[T]):
 
 class CreateContract(Protocol, Generic[K]):
     async def create(self, aggregate: K) -> None:
+        pass
+
+
+class UpdateContract(Protocol, Generic[K]):
+    async def update(self, aggregate: K) -> None:
         pass

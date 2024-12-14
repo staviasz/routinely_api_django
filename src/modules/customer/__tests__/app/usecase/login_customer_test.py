@@ -3,7 +3,7 @@ import pytest
 from main.errors.shared.custom_error import CustomError
 from main.infra.repository_in_memory import RepositoryInMemory
 from modules.auth import SessionServiceContract
-from modules.customer import LoginUsecase, CustomerAggregate, HashAdapter
+from modules.customer import LoginUsecase, CustomerAggregate
 
 
 class LoginRepositoryInMemory(RepositoryInMemory[CustomerAggregate]):
@@ -18,10 +18,8 @@ class TestLoginUseCase:
     def setup_method(self):
         self.repository = LoginRepositoryInMemory()
         self.auth = authMock
-        self.hash = HashAdapter()
-        self.usecase = LoginUsecase(self.repository, self.auth, self.hash)
+        self.usecase = LoginUsecase(self.repository, self.auth)
         self.password = "@Teste123"
-        self.password_hash = self.hash.hash(self.password)
         self.user = CustomerAggregate(
             {
                 "id": None,
@@ -31,7 +29,6 @@ class TestLoginUseCase:
                 "name": "Teste",
             }
         )
-        self.user.password = self.password_hash
 
     async def test_raise_error_if_email_not_found(self):
         with pytest.raises(CustomError) as e:
@@ -42,15 +39,6 @@ class TestLoginUseCase:
             "code_error": 404,
             "messages_error": ["email not found."],
         }
-
-    async def test_call_hash(self):
-        data = {"email": "G0s7B@example.com", "password": self.password}
-
-        self.repository.list_data.append(self.user)
-
-        with patch.object(self.hash, "verify") as mock_hash:
-            await self.usecase.perform(data)
-            mock_hash.assert_called_once_with(self.password, self.password_hash)
 
     async def test_raise_error_if_password_not_match(self):
         data = {"email": "G0s7B@example.com", "password": "password"}

@@ -5,6 +5,7 @@ from main.contracts import (
     FindFieldContract,
     Union_primitive_types,
     CreateContract,
+    UpdateContract,
 )
 from main.domain import Aggregate, Entity
 from main.errors.shared.custom_error import CustomError, CustomErrorAbstract
@@ -21,6 +22,7 @@ class RepositoryInMemory(
     FindFieldOrNoneContract[T],
     CreateContract[T],
     FindFieldContract[T],
+    UpdateContract[T],
     DeleteContract[T],
     Generic[T],
 ):
@@ -54,3 +56,9 @@ class RepositoryInMemory(
         for item in self.list_data:
             if getattr(item, field_name) == value:
                 self.list_data.remove(item)
+
+    async def update(self, aggregate: T) -> None:
+        for item in self.list_data:
+            if item.id == aggregate.id:
+                self.list_data.remove(item)
+                self.list_data.append(aggregate)

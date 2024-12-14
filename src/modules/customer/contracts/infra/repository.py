@@ -1,4 +1,9 @@
-from main.contracts import FindFieldOrNoneContract, CreateContract, FindFieldContract
+from main.contracts import (
+    FindFieldOrNoneContract,
+    CreateContract,
+    FindFieldContract,
+    UpdateContract,
+)
 from modules.customer.domain import CustomerAggregate
 
 T = CustomerAggregate
@@ -12,5 +17,25 @@ class LoginRepositoryContract(FindFieldContract[T]):
     pass
 
 
-class CustomerRepositoryContract(RegisterRepositoryContract, LoginRepositoryContract):
+class ForgetPasswordRepositoryContract(FindFieldContract[T]):
+    pass
+
+
+class ConfirmCodeToResetPasswordRepositoryContract(
+    FindFieldContract[T], UpdateContract[T]
+):
+    pass
+
+
+class NewPasswordRepositoryContract(FindFieldContract[T], UpdateContract[T]):
+    pass
+
+
+class CustomerRepositoryContract(
+    RegisterRepositoryContract,
+    LoginRepositoryContract,
+    ForgetPasswordRepositoryContract,
+    ConfirmCodeToResetPasswordRepositoryContract,
+    NewPasswordRepositoryContract,
+):
     pass

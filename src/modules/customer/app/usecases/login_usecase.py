@@ -6,7 +6,6 @@ from modules.customer.types import LoginInput, LoginOutput
 from modules.customer.contracts import (
     LoginUsecaseContract,
     LoginRepositoryContract,
-    HashContract,
 )
 
 
@@ -15,7 +14,6 @@ class LoginUsecase(LoginUsecaseContract):
         self,
         repository: LoginRepositoryContract,
         auth: SessionServiceContract,
-        hash: HashContract,
     ) -> None:
         self.repository = repository
         self.auth = auth
@@ -25,9 +23,8 @@ class LoginUsecase(LoginUsecaseContract):
 
         user = await self.repository.find_field("email", data["email"])
 
-        verify_password = self.hash.verify(data["password"], user.password)
-        if not verify_password:
-            raise CustomError(UnauthorizedError())
+        if data["password"] != user.password:
+            raise CustomError(UnauthorizedError("Invalid credentials"))
 
         payload = cast(Any, {"id": user.id, "email": user.email})
         return await self.auth.handle(payload)

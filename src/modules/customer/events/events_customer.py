@@ -7,3 +7,11 @@ class CreatedCustomerEvent(EventBaseClass):
 
 
 created_customer_event = CreatedCustomerEvent()
+
+
+class ForgotPasswordEvent(EventBaseClass):
+    def __init__(self) -> None:
+        super().__init__("ForgotPasswordEvent")
+
+
+forgot_password_event = ForgotPasswordEvent()
