@@ -25,7 +25,6 @@ class CustomerAggregate(Aggregate):
         self._clear_errors()
 
         self._create_id(props.get("id"), "CustomerAggregate")
-        print(props)
 
         props_customer = {
             "id": self.id,
@@ -56,6 +55,5 @@ class CustomerAggregate(Aggregate):
         self.is_active = False
 
     def change_password(self, password: str) -> None:
-        print("password", password)
         new_password = PasswordValueObject(password)
         self.password = new_password.value

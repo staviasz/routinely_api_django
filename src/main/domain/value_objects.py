@@ -31,7 +31,6 @@ class ValueObject(ABC, Generic[T]):
 
     def _raize_errors(self) -> None:
         errors = self._errors()
-        print("errors", errors)
         if errors:
             raise CustomError(errors)
 

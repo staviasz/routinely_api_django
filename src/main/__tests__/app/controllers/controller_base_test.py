@@ -61,7 +61,6 @@ class TestControllerBase:
         for response in arrange:
             self.usecase.return_value = response
             result = await self.controller.execute(self.request)
-            print("result", result["body"], "response", response["body"])
             assert result["status"] == response["status"]
             assert result["body"] == response["body"]
 

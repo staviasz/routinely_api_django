@@ -62,7 +62,6 @@ class TestRepositoryInMemory:
         with pytest.raises(CustomError) as e:
             await self.repository.find_field(field_name, value)
 
-        print(e.value.formate_errors)
         assert e.value.formate_errors == {
             "code_error": 404,
             "messages_error": [f"{field_name} not found."],

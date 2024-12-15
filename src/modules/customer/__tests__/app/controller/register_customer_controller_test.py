@@ -39,7 +39,6 @@ class TestRegisterCustomerController:
                 }
             }
         )
-        print(response)
 
         assert response["status"] == 400
         assert response["body"] == {
@@ -66,7 +65,6 @@ class TestRegisterCustomerController:
         )
 
         assert response["status"] == 400
-        print(response)
         assert response["body"] == {"message": ["Passwords: are not equal"]}
 
     async def test_call_usecase(self):

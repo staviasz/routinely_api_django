@@ -18,7 +18,6 @@ class TestSessionEntity:
     def test_valid_entity(self):
         session = SessionEntity({"user_id": "1"})
         dict_session = session.to_dict()
-        print(dict_session)
         assert dict_session["user_id"] == "1"
         assert dict_session["created_at"] is not None
         assert dict_session["expires_at"] is not None

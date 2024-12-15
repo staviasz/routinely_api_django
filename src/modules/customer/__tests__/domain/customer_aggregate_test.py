@@ -19,7 +19,6 @@ class TestCustomerAggregate:
             CustomerAggregate({"id": "None"})
 
         custom_error = e.value
-        print(custom_error.formate_errors)
         assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
