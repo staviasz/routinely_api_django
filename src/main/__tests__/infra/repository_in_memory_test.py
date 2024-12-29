@@ -1,13 +1,14 @@
-from typing import TypedDict
+from typing import Optional, TypedDict
 
 import pytest
 from main.domain import Entity
 from main.errors.shared.custom_error import CustomError
-from main.infra import RepositoryInMemory
+from main.infra import RepositoryInMemory, RepositoryInMemorySearchable
+from main.infra.repository.searchable import SearchParams
 
 
-class EntityProps(TypedDict):
-    id: str
+class EntityProps(TypedDict, total=False):
+    id: Optional[str]
     name: str
     age: int
 
@@ -15,10 +16,12 @@ class EntityProps(TypedDict):
 class EntityRepository(Entity[EntityProps]):
     def __init__(self, props: EntityProps) -> None:
         self.props = props
+        self._create_id(self.props.get("id"), "Entity")
+        super().__init__(props)
 
     @property
     def id(self) -> str:
-        return self.props["id"]
+        return self.__id
 
     @property
     def name(self) -> str:
@@ -80,3 +83,120 @@ class TestRepositoryInMemory:
         await self.repository.delete("name", "John")
 
         assert len(self.repository.list_data) == 0
+
+
+@pytest.mark.asyncio
+class TestRepositoryInMemorySearchable:
+    def setup_method(self):
+        self.repository = RepositoryInMemorySearchable[EntityRepository]()
+
+    async def test_apply_sort(self):
+        arrange = [
+            {"name": "brian", "age": 18},
+            {"name": "Ane", "age": 20},
+            {"name": "José", "age": 19},
+            {"name": "Cristian", "age": 21},
+        ]
+
+        for item in arrange:
+            entity = EntityRepository(item)
+            await self.repository.create(entity)
+
+        result = await self.repository._apply_sort(self.repository.list_data, "name")
+
+        names = [item.name for item in result]
+
+        assert names == ["Ane", "brian", "Cristian", "José"]
+
+        result = await self.repository._apply_sort(
+            self.repository.list_data, "name", "desc"
+        )
+
+        names = [item.name for item in result]
+
+        assert names == ["José", "Cristian", "brian", "Ane"]
+
+        result = await self.repository._apply_sort(self.repository.list_data, "age")
+
+        ages = [item.age for item in result]
+
+        assert ages == [18, 19, 20, 21]
+
+        result = await self.repository._apply_sort(
+            self.repository.list_data, "age", "desc"
+        )
+
+        ages = [item.age for item in result]
+
+        assert ages == [21, 20, 19, 18]
+
+    async def test_apply_paginate(self):
+        arrange = [
+            {"name": "brian", "age": 18},
+            {"name": "Ane", "age": 20},
+            {"name": "José", "age": 19},
+        ]
+
+        for item in arrange:
+            entity = EntityRepository(item)
+            await self.repository.create(entity)
+
+        result = await self.repository._apply_paginate(self.repository.list_data, 1, 2)
+
+        assert len(result) == 2
+
+        result = await self.repository._apply_paginate(self.repository.list_data, 2, 2)
+
+        assert len(result) == 1
+
+        result = await self.repository._apply_paginate(self.repository.list_data, 3, 2)
+
+        assert len(result) == 1
+
+    async def test_apply_paginate_with_incorrect_params(self):
+        arrange_data = [
+            {"name": "brian", "age": 18},
+            {"name": "Ane", "age": 20},
+            {"name": "José", "age": 19},
+        ]
+
+        for item in arrange_data:
+            entity = EntityRepository(item)
+            await self.repository.create(entity)
+
+        arrange = [
+            {"page": 0, "per_page": 2},
+            {"page": None, "per_page": 2},
+            {"page": 1, "per_page": None},
+            {"page": 1, "per_page": 0},
+        ]
+
+        for item in arrange:
+            result = await self.repository._apply_paginate(
+                self.repository.list_data, item["page"], item["per_page"]
+            )
+
+            assert len(result) == 3
+
+    async def test_search(self):
+        arrange = [
+            {"name": "brian", "age": 18},
+            {"name": "Ane", "age": 20},
+            {"name": "José", "age": 19},
+        ]
+
+        for item in arrange:
+            entity = EntityRepository(item)
+            await self.repository.create(entity)
+
+        result = await self.repository.search(SearchParams({"page": 1, "per_page": 2}))
+
+        assert result.to_dict() == {
+            "total": 3,
+            "current_page": 1,
+            "per_page": 2,
+            "last_page": 2,
+            "items": self.repository.list_data[0:2],
+            "sort": None,
+            "order": None,
+        }

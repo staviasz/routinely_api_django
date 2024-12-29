@@ -6,6 +6,10 @@ from .infra.repository_infra_contract import (
     FindFieldContract,
     DeleteContract,
     UpdateContract,
+    order_types,
+    SearchParamsType,
+    SearchResultType,
+    SearchContract,
 )
 from .infra.event_infra_contract import (
     EventBaseClass,

@@ -45,7 +45,7 @@ class Aggregate(ABC, Generic[T]):
 
     def _create_id(self, id: Optional[str], origin: Optional[str]) -> None:
         if id and not UuidAdapter.validate_uuid4(id):
-            self._add_error(InvalidIdError(cast(str, origin)))
+            self._add_error(InvalidIdError(original=cast(str, origin)))
 
         self.__id = UuidAdapter.generate_uuid4() if not id else id
 

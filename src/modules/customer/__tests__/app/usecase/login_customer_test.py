@@ -1,7 +1,7 @@
 from unittest.mock import Mock, patch
 import pytest
 from main.errors.shared.custom_error import CustomError
-from main.infra.repository_in_memory import RepositoryInMemory
+from main.infra.repository.repository_in_memory import RepositoryInMemory
 from modules.auth import SessionServiceContract
 from modules.customer import LoginUsecase, CustomerAggregate
 

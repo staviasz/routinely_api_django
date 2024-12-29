@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import pytest
 from unittest.mock import patch
 from main.errors.shared.custom_error import CustomError
-from main.infra.repository_in_memory import RepositoryInMemory
+from main.infra.repository.repository_in_memory import RepositoryInMemory
 from modules.auth import SessionEntity, JWTAdapter, CreateSessionService
 
 
