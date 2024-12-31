@@ -1,5 +1,3 @@
-from datetime import datetime
-from typing import Optional, cast
 from modules.tasks import (
     DeleteTaskUsecaseContract,
     DeleteTaskRepositoryContract,
