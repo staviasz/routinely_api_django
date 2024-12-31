@@ -16,7 +16,7 @@ class TestUpdateTaskUsecase:
         self.usecase = UpdateTaskUsecase(self.repository)
         self.data = {
             "user_id": "811c5f65-c4e1-4084-8b15-e8342de5d57b",
-            "type": "tasks",
+            "type": "task",
             "category": "career",
             "name": "Teste",
             "date_time": "2023/01/01",
@@ -54,7 +54,7 @@ class TestUpdateTaskUsecase:
         assert custom_error.formate_errors == {
             "code_error": 400,
             "messages_error": [
-                "The Type must be one of: tasks, habit",
+                "The Type must be one of: task, habit",
                 "The category must be one of: career, finance, study, health, leisure, productivity, miscellaneous",
                 "The name is mandatory and must be up to 50 characters long",
                 "The date_time is mandatory and must be in the formats YYYY/mm/dd, YYYY/mm/dd HH:MM, YYYY/mm/dd HH:MM:SS, YYYY/mm/ddTHH:MM:SS",

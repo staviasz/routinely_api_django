@@ -16,7 +16,7 @@ class TestDeleteTaskUsecase:
         self.usecase = DeleteTaskUsecase(self.repository)
         self.data = {
             "user_id": "811c5f65-c4e1-4084-8b15-e8342de5d57b",
-            "type": "tasks",
+            "type": "task",
             "category": "career",
             "name": "Teste",
             "date_time": "2023/01/01",

@@ -1,3 +1,4 @@
+from typing import Generic, Protocol
 from main.contracts.infra.repository_infra_contract import (
     CreateContract,
     FindFieldContract,
@@ -22,8 +23,11 @@ class DeleteTaskRepositoryContract(DeleteContract[T]):
     pass
 
 
-class ListTasksRepositoryContract(FindFieldContract[T]):
-    pass
+class ListTasksRepositoryContract(Protocol):
+    async def find_tasks_by_user_id_and_month_and_year(
+        self, user_id: str, month: int, year: int
+    ) -> list[T]:
+        pass
 
 
 class TaskRepositoryContract(

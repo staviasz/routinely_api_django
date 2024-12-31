@@ -8,4 +8,5 @@ from .infra.repository import (
     TaskRepositoryContract,
     UpdateTaskRepositoryContract,
     DeleteTaskRepositoryContract,
+    ListTasksRepositoryContract,
 )

@@ -1,4 +1,4 @@
 from typing import Literal, TypeAlias
 
 
-TaskType: TypeAlias = Literal["tasks", "habit"]
+TaskType: TypeAlias = Literal["task", "habit"]

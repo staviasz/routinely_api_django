@@ -12,7 +12,7 @@ class TestTaskEntity:
         self.data = {
             "user_id": "811c5f65-c4e1-4084-8b15-e8342de5d57b",
             "name": "testing",
-            "type": "tasks",
+            "type": "task",
             "category": "productivity",
             "date_time": (datetime.now() + timedelta(hours=1)).strftime(
                 "%Y/%m/%d %H:%M:%S"

@@ -39,7 +39,7 @@ class BaseValidationPydantic(ValidatorContract[T]):
             formate_errors.append(
                 self.__create_instance_error(
                     code_error=400,
-                    message_error=self.__fomat_message_error(
+                    message_error=self.__format_message_error(
                         field_temp, self.__validate_sting_error(line)
                     ),
                 )
@@ -54,10 +54,10 @@ class BaseValidationPydantic(ValidatorContract[T]):
 
         return Error(code_error=code_error, message_error=message_error)
 
-    def __fomat_message_error(self, field: str | None, message_error: str) -> str:
+    def __format_message_error(self, field: str | None, message_error: str) -> str:
         if field is None or field == "":
             return message_error
-        return f"{field}: {message_error}"
+        return f"{field.split('.')[0]}: {message_error}"
 
     def __validate_sting_error(self, error_str: str) -> str:
         error_str = error_str.split("[")[0].strip()
