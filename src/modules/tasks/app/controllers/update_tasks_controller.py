@@ -1,12 +1,10 @@
-from main import ValidatorContract, create, BaseController
-from modules.tasks import CreateTaskUsecaseContract, CreateTaskSchema
+from main import BaseController, ValidatorContract, no_content
+from modules.tasks import UpdateTaskUsecaseContract
 
 
-class CreateTaskController(BaseController):
+class UpdateTaskController(BaseController):
     def __init__(
-        self,
-        validator: ValidatorContract[CreateTaskSchema],
-        usecase: CreateTaskUsecaseContract,
+        self, validator: ValidatorContract, usecase: UpdateTaskUsecaseContract
     ):
         self.validator = validator
         self.usecase = usecase
@@ -19,9 +17,7 @@ class CreateTaskController(BaseController):
             print(data)
 
             self.validator.validate(data)
-            response = await self.usecase.perform(self.validator.to_dict())  # type: ignore
-
-            return create({**response})
+            await self.usecase.perform(self.validator.to_dict())
+            return no_content()
         except Exception as e:
-            print(e)
             return self._format_response_error(e)

@@ -6,3 +6,4 @@ from .usecases.list_task_usecase import ListTaskUsecase
 from .controllers.create_task_controller import CreateTaskController
 from .controllers.delete_task_controller import DeleteTaskController
 from .controllers.list_task_controller import ListTaskController
+from .controllers.update_tasks_controller import UpdateTaskController

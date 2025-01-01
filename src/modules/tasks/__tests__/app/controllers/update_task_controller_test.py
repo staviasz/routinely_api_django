@@ -6,9 +6,9 @@ from unittest.mock import Mock, patch
 
 from main import BaseValidationPydantic
 from modules.tasks import (
-    CreateTaskController,
-    CreateTaskUsecaseContract,
-    CreateTaskSchema,
+    UpdateTaskController,
+    UpdateTaskUsecaseContract,
+    UpdateTaskSchema,
     TaskType,
     TaskCategories,
     Weekday,
@@ -27,14 +27,15 @@ def formate_types_in_str(types: list[str]) -> str:
 
 
 @pytest.mark.asyncio
-class TestCreateTaskController:
+class TestUpdateTaskController:
     def setup_method(self):
-        self.validator = BaseValidationPydantic(CreateTaskSchema)
-        self.usecase = Mock(spec=CreateTaskUsecaseContract)
-        self.controller = CreateTaskController(self.validator, self.usecase)
+        self.validator = BaseValidationPydantic(UpdateTaskSchema)
+        self.usecase = Mock(spec=UpdateTaskUsecaseContract)
+        self.controller = UpdateTaskController(self.validator, self.usecase)
         self.user_id = "user_id_test"
         now = datetime.now()
         self.data = {
+            "id": "id_test",
             "description": "description_test",
             "category": "career",
             "name": "name_test_",
@@ -50,14 +51,20 @@ class TestCreateTaskController:
         assert response["status"] == 400
         assert response["body"] == {
             "message": [
+                "id: Field required",
                 "user_id: Input should be a valid string",
-                "description: Field required",
-                "category: Field required",
-                "name: Field required",
-                "type: Field required",
-                "date_time: Field required",
             ]
         }
+
+    async def test_execute_validate_without_fields_to_update(self):
+        response = await self.controller.execute(
+            {
+                "headers": {"user_id": self.user_id},
+                "body": {"id": self.data["id"]},
+            }
+        )
+        assert response["status"] == 400
+        assert response["body"] == {"message": ["No fields to update"]}
 
     async def test_execute_validate_field_user_id(self):
         arrange = [
@@ -100,10 +107,6 @@ class TestCreateTaskController:
                 "message": ["description: Input should be a valid string"],
             },
             {
-                "body": new_data,
-                "message": ["description: Field required"],
-            },
-            {
                 "body": {**new_data, "description": "a" * 1001},
                 "message": ["description: String should have at most 1000 characters"],
             },
@@ -144,10 +147,6 @@ class TestCreateTaskController:
                     f"category: Input should be {formate_types_in_str(list(get_args(TaskCategories)))}"
                 ],
             },
-            {
-                "body": new_data,
-                "message": ["category: Field required"],
-            },
         ]
 
         for item in arrange:
@@ -170,10 +169,6 @@ class TestCreateTaskController:
             {
                 "body": {**new_data, "name": True},
                 "message": ["name: Input should be a valid string"],
-            },
-            {
-                "body": new_data,
-                "message": ["name: Field required"],
             },
             {
                 "body": {**new_data, "name": "a" * 51},
@@ -214,10 +209,6 @@ class TestCreateTaskController:
                     f"type: Input should be {formate_types_in_str(list(get_args(TaskType)))}"
                 ],
             },
-            {
-                "body": new_data,
-                "message": ["type: Field required"],
-            },
         ]
 
         for item in arrange:
@@ -240,10 +231,6 @@ class TestCreateTaskController:
             {
                 "body": {**new_data, "date_time": True},
                 "message": ["date_time: Input should be a valid string"],
-            },
-            {
-                "body": new_data,
-                "message": ["date_time: Field required"],
             },
             {
                 "body": {**new_data, "date_time": "test"},
@@ -343,8 +330,6 @@ class TestCreateTaskController:
             response = await self.controller.execute(
                 {"headers": {"user_id": self.user_id}, "body": self.data}
             )
-            assert response["status"] == 201
-            assert response["body"] == {
-                "id": "any_id",
-            }
+            assert response["status"] == 204
+            assert response["body"] is None
         mock.assert_called_once_with({**self.data, "user_id": self.user_id})
