@@ -34,5 +34,6 @@ class TaskRepositoryContract(
     CreateTaskRepositoryContract,
     UpdateTaskRepositoryContract,
     DeleteTaskRepositoryContract,
+    ListTasksRepositoryContract,
 ):
     pass
