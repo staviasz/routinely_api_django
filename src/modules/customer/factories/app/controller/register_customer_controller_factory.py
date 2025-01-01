@@ -2,6 +2,8 @@ from main import base_validation_factory
 from modules.customer import (
     RegisterCustomerController,
     RegisterCustomerSchema,
+)
+from modules.customer.factories.app.usecase.register_customer_usecase_factory import (
     register_customer_usecase_factory,
 )
 
