@@ -7,6 +7,7 @@ from .usecases.confirm_code_to_reset_password_usecase import (
     ConfirmCodeToResetPasswordUsecase,
 )
 from .usecases.new_password_usecase import NewPasswordUsecase
+from .usecases.refresh_login_usecase import RefreshLoginUsecase
 
 from .controllers.register_customer_controller import RegisterCustomerController
 from .controllers.login_controller import LoginController

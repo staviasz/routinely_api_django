@@ -1,10 +1,19 @@
 from typing import cast
 from main.errors import BadRequestError, CustomError
 from modules.auth.services.base_session_tokens import SessionService
-from modules.auth.types.session_type import SessionInput, SessionOutput
+from modules.auth import (
+    SessionInput,
+    SessionOutput,
+    CreateSessionRepositoryContract,
+    JWTContract,
+)
 
 
 class RefreshSessionService(SessionService):
+    def __init__(
+        self, repository: CreateSessionRepositoryContract, token: JWTContract
+    ) -> None:
+        super().__init__(repository, token)
 
     async def handle(self, props: SessionInput) -> SessionOutput:
         tokens = props.get("tokens")

@@ -9,5 +9,5 @@ class CreateSessionRepositoryContract(CreateContract[T]):
     pass
 
 
-class SessionRepositoryContract:
+class SessionRepositoryContract(CreateSessionRepositoryContract):
     pass

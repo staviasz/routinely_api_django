@@ -31,7 +31,9 @@ class SendEmailRegisterCustomerHandler(HandlerContract):
         self.__mailing.send_email(data)
 
 
-send_email_register_customer_handler = SendEmailRegisterCustomerHandler()
+send_email_register_customer_handler: SendEmailRegisterCustomerHandler = (
+    SendEmailRegisterCustomerHandler()
+)
 
 
 class SendEmailForgotPasswordCustomerHandler(HandlerContract):
@@ -55,4 +57,6 @@ class SendEmailForgotPasswordCustomerHandler(HandlerContract):
         self.__mailing.send_email(data)
 
 
-send_email_forgot_password_customer_handler = SendEmailForgotPasswordCustomerHandler()
+send_email_forgot_password_customer_handler: SendEmailForgotPasswordCustomerHandler = (
+    SendEmailForgotPasswordCustomerHandler()
+)

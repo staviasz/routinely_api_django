@@ -9,3 +9,5 @@ from .validator.refresh_login_schema import RefreshLoginSchema
 
 from .crypto.encryption_to_send_email import EncryptionToSendEmailAdapter
 from .cache.forget_password_code import CacheForgetPasswordCode
+
+from .db.repository_customer import RepositoryCustomer
