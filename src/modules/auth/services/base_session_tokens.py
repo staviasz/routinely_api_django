@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from datetime import datetime
-from typing import Any
+from typing import Any, cast
 from main.errors import CustomError, BadRequestError
 from modules.auth.domain.entity import SessionEntity
 from modules.auth.types import SessionInput, SessionOutput
@@ -41,7 +41,10 @@ class SessionService(SessionServiceContract):
         }
         refresh_token = self.token.encode(payload_refresh_token)
 
-        await self.repository.create(entity_session)
+        session = await self.repository.find_session_or_none(user_id)
+        if not session or session.expires_at < datetime.now():  # type: ignore
+            print("update")
+            await self.repository.create(entity_session)
 
         return {
             "access_token": token,

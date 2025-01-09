@@ -6,7 +6,10 @@ from modules.auth import SessionEntity, JWTAdapter, RefreshSessionService
 
 
 class SessionRepositoryInMemory(RepositoryInMemory[SessionEntity]):
-    pass
+    async def find_session_or_none(self, user_id: str) -> SessionEntity | None:
+        sessions = [session for session in self.list_data if session.user_id == user_id]
+
+        return sessions[-1] if sessions else None
 
 
 @pytest.mark.asyncio

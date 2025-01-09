@@ -42,7 +42,7 @@ class TaskEntity(Entity[TaskModel]):
             str, self.__validate_date_time(props.get("date_time", ""))
         )
         props["description"] = self.__validate_description(props.get("description", ""))
-        self.__validate_list_weekdays(props.get("weekdays"))
+        props["weekdays"] = self.__validate_list_weekdays(props.get("weekdays"))
         props["finally_datetime"] = cast(
             str, self.__validate_finally_date_time(props.get("finally_datetime"))
         )
@@ -88,16 +88,20 @@ class TaskEntity(Entity[TaskModel]):
 
         return strip_value
 
-    def __validate_list_weekdays(self, value: Optional[list[Weekday]]) -> None:
+    def __validate_list_weekdays(
+        self, value: Optional[list[Weekday]]
+    ) -> Optional[list[Weekday]]:
         if not value or len(value) == 0:
-            return
+            return None
 
         list_categories = list(get_args(Weekday))
 
         for item in value:
             if item not in list_categories:
                 self._add_error(InvalidWeekdayError())
-                return
+                return None
+
+        return value
 
     def __validate_finally_date_time(self, value: Optional[str]) -> datetime | None:
         try:

@@ -6,31 +6,31 @@ repos:
         stages: [commit-msg]
 
   - repo: https://github.com/psf/black
-    rev: 24.10.0 
+    rev: 24.10.0
     hooks:
       - id: black
-        language_version: python3 
-        stages: [pre-commit] 
- 
+        language_version: python3
+        stages: [pre-commit]
+
   - repo: https://github.com/PyCQA/flake8
     rev: 7.1.1
     hooks:
       - id: flake8
         stages: [pre-commit]
-  
+
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: 'v1.13.0' 
+    rev: "v1.13.0"
     hooks:
-        - id: mypy
-          always_run: true
-  
+      - id: mypy
+        entry: bash -c "python3 -m pip install types-pytz"
+        always_run: true
+
   - repo: local
     hooks:
-    - id: pytest
-      name: pytest
-      entry: /bin/zsh -c './venv/bin/pytest ./src'
-      language: system
-      types: [python]
-      pass_filenames: false
-      always_run: true
-  
+      - id: pytest
+        name: pytest
+        entry: /bin/zsh -c './venv/bin/pytest ./src'
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true

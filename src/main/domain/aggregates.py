@@ -41,7 +41,14 @@ class Aggregate(ABC, Generic[T]):
 
     @property
     def to_dict(self) -> T:
-        return self.__props
+        id = self.__props.get("id", self.__id)
+        if self.__props.get("id") is not None:
+            del self.__props["id"]
+        props = {
+            "id": id,
+            **self.__props,
+        }
+        return cast(T, props)
 
     def _create_id(self, id: Optional[str], origin: Optional[str]) -> None:
         if id and not UuidAdapter.validate_uuid4(id):

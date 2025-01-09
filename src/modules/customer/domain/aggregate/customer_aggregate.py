@@ -14,12 +14,12 @@ class CustomerAggregate(Aggregate):
 
     def __init__(self, props: InputCustomerAggregateModel) -> None:
         self._validate(props)
-        self.__props = props
         self.name = props.get("name", "")
         self.email = props.get("email", "")
         self.password = props.get("password", "")
         self.accepted_terms = props.get("accepted_terms", False)
         self.is_active = props.get("is_active", False)
+        super().__init__(props)
 
     def _validate(self, props: InputCustomerAggregateModel) -> None:
         self._clear_errors()
