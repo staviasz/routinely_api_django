@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 
 from main.contracts import BaseUsecaseContract
-from modules.customer.domain import InputCustomerAggregateModel
+from modules.customer import RegisterCustomerInput, RegisterCustomerOutput
 
 
-class RegisterUsecaseContract(BaseUsecaseContract[InputCustomerAggregateModel, None]):
+class RegisterUsecaseContract(
+    BaseUsecaseContract[RegisterCustomerInput, RegisterCustomerOutput]
+):
     @abstractmethod
-    async def perform(self, data: InputCustomerAggregateModel) -> None:
+    async def perform(self, data: RegisterCustomerInput) -> RegisterCustomerOutput:
         pass

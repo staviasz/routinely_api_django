@@ -42,8 +42,7 @@ class SessionService(SessionServiceContract):
         refresh_token = self.token.encode(payload_refresh_token)
 
         session = await self.repository.find_session_or_none(user_id)
-        if not session or session.expires_at < datetime.now():  # type: ignore
-            print("update")
+        if not session or session.expires_at.replace(tzinfo=None) < datetime.now():  # type: ignore
             await self.repository.create(entity_session)
 
         return {
@@ -61,3 +60,6 @@ class SessionService(SessionServiceContract):
             "iat": current_time,
             "exp": current_time + expires_in,
         }
+
+    async def verify_token(self, token: str) -> SessionInput:
+        return cast(SessionInput, self.token.decode(token))

@@ -4,7 +4,11 @@ from modules.customer.contracts import (
     RegisterUsecaseContract,
     RegisterRepositoryContract,
 )
-from modules.customer.domain import InputCustomerAggregateModel, CustomerAggregate
+from modules.customer import (
+    RegisterCustomerOutput,
+    RegisterCustomerInput,
+    CustomerAggregate,
+)
 
 
 class RegisterUsecase(RegisterUsecaseContract):
@@ -18,7 +22,7 @@ class RegisterUsecase(RegisterUsecaseContract):
         self.event = event
         self.dispatcher = dispatcher
 
-    async def perform(self, data: InputCustomerAggregateModel) -> None:
+    async def perform(self, data: RegisterCustomerInput) -> RegisterCustomerOutput:
         aggregate_customer = CustomerAggregate(data)
 
         email = aggregate_customer.email
@@ -28,7 +32,13 @@ class RegisterUsecase(RegisterUsecaseContract):
 
         await self.repository.create(aggregate_customer)
 
-        self.event.set_payload({"name": aggregate_customer.name, "email": email})
+        self.event.set_payload(
+            {
+                "name": aggregate_customer.name,
+                "email": email,
+                "callback_url": data["callback_url"],
+            }
+        )
         self.dispatcher.dispatch(self.event)
 
         return

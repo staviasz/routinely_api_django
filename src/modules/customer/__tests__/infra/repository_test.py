@@ -11,9 +11,9 @@ from modules.customer.domain.models.input_customer_aggregate_model import (
 
 repository = repository_customer_factory()
 data: InputCustomerAggregateModel = {
-    "name": "Test",
+    "name": "Test Customer",
     "accepted_terms": True,
-    "email": "test@example.com",
+    "email": "testCustomer@example.com",
     "password": "@Teste1",
 }
 aggregate = CustomerAggregate(data)
@@ -59,6 +59,7 @@ class TestCustomerRepository:
 
     async def test_find_field_by_customer(self):
         customer = await self.repository.find_field("name", self.aggregate.name)
+        print(customer.to_dict)
         assert customer.to_dict == self.aggregate.to_dict
 
     async def test_find_field_by_account(self):
@@ -97,12 +98,9 @@ class TestCustomerRepository:
 
     async def test_update_customer(self):
         data = {
+            **self.data,
             "id": self.aggregate.id,
             "name": "Test updated",
-            "accepted_terms": True,
-            "email": "test@example.com",
-            "password": "@Teste1",
-            "is_active": True,
         }
         aggregate = CustomerAggregate(data)
 

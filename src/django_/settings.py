@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from main.configs.env import env
-from django_.configs.db_config import DATABASE
+from django_.configs import DATABASE, auths
 
 # from django_.models import CustomerDBModel, AccountDBModel, WeekdayDBModel, TaskDBModel
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "django_extensions",
     "drf_yasg",
     "django_",
     "django_.models",
@@ -59,7 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "urls"
+ROOT_URLCONF = "django_.urls"
 
 TEMPLATES = [
     {
@@ -84,7 +85,16 @@ WSGI_APPLICATION = "wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-DATABASES = DATABASE
+DATABASES = {
+    "default": {
+        "ENGINE": env["database"]["engine"],
+        "NAME": env["database"]["name"],
+        "USER": env["database"]["user"],
+        "PASSWORD": env["database"]["password"],
+        "HOST": env["database"]["host"],
+        "PORT": env["database"]["port"],
+    }
+}
 
 
 # Password validation
@@ -126,4 +136,6 @@ STATIC_URL = "static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
+print(auths)
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+SWAGGER_SETTINGS = {"USE_SESSION_AUTH": False, "SECURITY_DEFINITIONS": auths}

@@ -24,6 +24,7 @@ class TestRegisterCustomerController:
                 "password: Field required",
                 "confirmed_password: Field required",
                 "accepted_terms: Field required",
+                "callback_url: Input should be a valid string",
             ]
         }
 
@@ -36,7 +37,7 @@ class TestRegisterCustomerController:
                     "password": "invalidd",
                     "confirmed_password": "invalidd",
                     "accepted_terms": False,
-                }
+                },
             }
         )
 
@@ -48,19 +49,21 @@ class TestRegisterCustomerController:
                 "password: Must contain at least one uppercase letter, one lowercase letter, one special character, one number and be at least 8 characters long",
                 "confirmed_password: Must contain at least one uppercase letter, one lowercase letter, one special character, one number and be at least 8 characters long",
                 "accepted_terms: Terms must be accepted",
+                "callback_url: Input should be a valid string",
             ]
         }
 
     async def test_different_passwords(self):
         response = await controller.execute(
             {
+                "query": {"callback_url": "any_url"},
                 "body": {
                     "name": "valid",
                     "email": "test@test.com",
                     "password": "@Teste123",
                     "confirmed_password": "@Teste1234",
                     "accepted_terms": True,
-                }
+                },
             }
         )
 
@@ -69,26 +72,35 @@ class TestRegisterCustomerController:
 
     async def test_call_usecase(self):
         data = {
-            "name": "valid",
-            "email": "test@test.com",
-            "password": "@Teste123",
-            "confirmed_password": "@Teste123",
-            "accepted_terms": True,
+            "query": {"callback_url": "any_url"},
+            "body": {
+                "name": "valid",
+                "email": "test@test.com",
+                "password": "@Teste123",
+                "confirmed_password": "@Teste123",
+                "accepted_terms": True,
+            },
         }
-        await controller.execute({"body": data})
 
-        usecase.perform.assert_called_once_with({**data})
+        await controller.execute({"body": data["body"], "query": data["query"]})
+
+        usecase.perform.assert_called_once_with({**data["body"], **data["query"]})
 
     async def test_success(self):
         data = {
-            "name": "valid",
-            "email": "test@test.com",
-            "password": "@Teste123",
-            "confirmed_password": "@Teste123",
-            "accepted_terms": True,
+            "query": {"callback_url": "any_url"},
+            "body": {
+                "name": "valid",
+                "email": "test@test.com",
+                "password": "@Teste123",
+                "confirmed_password": "@Teste123",
+                "accepted_terms": True,
+            },
         }
-        response = await controller.execute({"body": data})
+        response = await controller.execute(
+            {"body": data["body"], "query": data["query"]}
+        )
 
-        usecase.perform.assert_called_with({**data})
-        assert response["status"] == 204
-        assert response["body"] is None
+        usecase.perform.assert_called_with({**data["body"], **data["query"]})
+        assert response["status"] == 201
+        assert response["body"] == {}

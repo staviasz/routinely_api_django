@@ -23,8 +23,15 @@ class LoginUsecase(LoginUsecaseContract):
 
         user = await self.repository.find_field("email", data["email"])
 
+        if not user.is_active:
+            raise CustomError(
+                UnauthorizedError(
+                    "User not active. Confirm your email or contact support."
+                )
+            )
+
         if data["password"] != user.password:
             raise CustomError(UnauthorizedError("Invalid credentials"))
 
-        payload = cast(Any, {"id": user.id, "email": user.email})
+        payload = cast(Any, {"user_id": user.id, "email": user.email})
         return await self.auth.handle(payload)

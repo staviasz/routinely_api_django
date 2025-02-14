@@ -40,9 +40,26 @@ class TestLoginUseCase:
             "messages_error": ["email not found."],
         }
 
+    async def test_raise_error_if_user_not_active(self):
+        data = {"email": "G0s7B@example.com", "password": "password"}
+
+        self.repository.list_data.append(self.user)
+
+        with pytest.raises(CustomError) as e:
+            await self.usecase.perform(data)
+
+        custom_error = e.value
+        assert custom_error.formate_errors == {
+            "code_error": 401,
+            "messages_error": [
+                "User not active. Confirm your email or contact support."
+            ],
+        }
+
     async def test_raise_error_if_password_not_match(self):
         data = {"email": "G0s7B@example.com", "password": "password"}
 
+        self.user.activate()
         self.repository.list_data.append(self.user)
 
         with pytest.raises(CustomError) as e:
@@ -57,12 +74,13 @@ class TestLoginUseCase:
     async def test_call_auth_with_correct_payload(self):
         data = {"email": "G0s7B@example.com", "password": self.password}
 
+        self.user.activate()
         self.repository.list_data.append(self.user)
 
         with patch.object(self.auth, "handle") as mock_auth:
             await self.usecase.perform(data)
             mock_auth.assert_called_once_with(
-                {"id": self.user.id, "email": self.user.email}
+                {"user_id": self.user.id, "email": self.user.email}
             )
 
     async def test_login_successfully(self):
@@ -73,6 +91,7 @@ class TestLoginUseCase:
             "expires_in": 3600,
         }
 
+        self.user.activate()
         self.repository.list_data.append(self.user)
         self.auth.handle.return_value = {
             "access_token": "access_token",

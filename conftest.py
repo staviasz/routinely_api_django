@@ -6,7 +6,6 @@ from django.db import connections
 from django.core.management import call_command
 from django.conf import settings
 
-
 if not settings.configured:
     django.setup()
 
@@ -26,16 +25,26 @@ def setup_database():
 
 @pytest.fixture(scope="function")
 def fake_customer_db(request):
-    customer_id = request.param
-    print(customer_id)
+    print(request.param)
+    param = request.param
+    customer_data = {
+        "id": param["id"],
+        "email": param["email"],
+        "password": param.get("password", "@Teste123"),
+        "accepted_terms": param.get("accepted_terms", True),
+        "name": param.get("name", "Teste"),
+        "is_active": param.get("is_active", True),
+    }
     customer = CustomerDBModel.objects.create(
-        id=customer_id, name="test", accepted_terms=True
+        id=customer_data["id"],
+        name=customer_data["name"],
+        accepted_terms=customer_data["accepted_terms"],
     )
     account = AccountDBModel.objects.create(
         id=customer.id,
-        email="test@example.com",
-        is_active=True,
-        password="test",
+        email=customer_data["email"],
+        is_active=customer_data["is_active"],
+        password=customer_data["password"],
         customer=customer,
     )
     yield

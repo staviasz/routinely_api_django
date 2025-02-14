@@ -6,6 +6,8 @@ from .docs.customer_docs import (
     ForgetPasswordDoc,
     RefreshLoginDoc,
 )
+
+
 from .customer_views import (
     RegisterCustomerView,
     NewPasswordView,
@@ -13,6 +15,7 @@ from .customer_views import (
     LoginCustomerView,
     ForgetPasswordView,
     ConfirmCodeToResetPasswordView,
+    ConfirmEmailView,
 )
 
 from .docs.task_docs import (

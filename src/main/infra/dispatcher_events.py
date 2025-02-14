@@ -1,3 +1,4 @@
+import asyncio
 from main.contracts import DispatcherContract
 from main.contracts import HandlerContract
 from main.errors import CustomError, ConflictError
@@ -32,4 +33,4 @@ class DispatcherEvents(DispatcherContract):
         handlers_by_name = self.__handlers_dict.get(event.get_name())
         if handlers_by_name:
             for handler in handlers_by_name:
-                handler.handle(event)
+                asyncio.create_task(handler.handle(event))

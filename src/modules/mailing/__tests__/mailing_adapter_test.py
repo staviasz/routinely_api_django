@@ -1,11 +1,14 @@
 import unittest
 from unittest.mock import patch, MagicMock
+from main.configs import env
 from modules.mailing.adapter import MailingAdapter
 
 
 class TestMailingAdapter(unittest.TestCase):
     def setUp(self):
         self.init_props = {
+            "smtp_server": env["send_email_customer"]["smtp_server"],
+            "smtp_port": env["send_email_customer"]["smtp_port"],
             "from_email": "test.sender@example.com",
             "password": "password123",
         }
@@ -25,7 +28,9 @@ class TestMailingAdapter(unittest.TestCase):
 
         self.adapter.send_email(self.email_props)
 
-        mock_smtp.assert_called_once_with("smtp.gmail.com", 587)
+        mock_smtp.assert_called_once_with(
+            self.init_props["smtp_server"], self.init_props["smtp_port"]
+        )
         mock_server.starttls.assert_called_once()
         mock_server.login.assert_called_once_with(
             self.init_props["from_email"], self.init_props["password"]

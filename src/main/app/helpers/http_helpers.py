@@ -34,5 +34,9 @@ def conflict(error: CustomError) -> HttpResponse:
     return {"status": 409, "body": {"message": error.formate_errors["messages_error"]}}
 
 
+def redirect(url: str) -> HttpResponse:
+    return {"status": 302, "headers": {"Location": url}}
+
+
 def internal_server_error() -> HttpResponse:
     return {"status": 500, "body": {"message": ["Internal Server Error"]}}

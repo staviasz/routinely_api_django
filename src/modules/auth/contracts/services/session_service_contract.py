@@ -8,3 +8,7 @@ class SessionServiceContract(BaseServiceContract[SessionInput, SessionOutput]):
     @abstractmethod
     async def handle(self, data: SessionInput) -> SessionOutput:
         pass
+
+    @abstractmethod
+    async def verify_token(self, token: str) -> SessionInput:
+        pass

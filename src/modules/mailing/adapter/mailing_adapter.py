@@ -10,10 +10,14 @@ from main.contracts import MailingContract
 class InitProps(TypedDict):
     from_email: str
     password: str
+    smtp_server: str
+    smtp_port: int
 
 
 class MailingAdapter(MailingContract):
     def __init__(self, props: InitProps) -> None:
+        self.__smtp_server = props["smtp_server"]
+        self.__smtp_port = props["smtp_port"]
         self.__email_sender = {
             "from_email": props["from_email"],
             "password": props["password"],
@@ -21,7 +25,7 @@ class MailingAdapter(MailingContract):
 
     def send_email(self, props) -> None:
         try:
-            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server = smtplib.SMTP(self.__smtp_server, self.__smtp_port)
             server.starttls()
             server.login(
                 self.__email_sender["from_email"], self.__email_sender["password"]

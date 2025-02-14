@@ -1,9 +1,24 @@
+from typing import Any
 from drf_yasg import openapi
+from django_.configs.drf_yasg_config import auths
 
 
-class RegisterCustomerDoc:
+class BaseCustomerDoc:
     tags = (["customer"],)
+    security: list = []
+
+
+class RegisterCustomerDoc(BaseCustomerDoc):
     operation_description = "Registrar um novo cliente"
+    manual_parameters = [
+        openapi.Parameter(
+            "callback_url",
+            openapi.IN_QUERY,
+            description="URL de callback para redirecionamento",
+            type=openapi.TYPE_STRING,
+            required=True,
+        )
+    ]
     request_body = openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
@@ -46,8 +61,7 @@ class RegisterCustomerDoc:
     }
 
 
-class LoginCustomerDoc:
-    tags = (["customer"],)
+class LoginCustomerDoc(BaseCustomerDoc):
     operation_description = "Autenticação de cliente"
     request_body = openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -91,8 +105,7 @@ class LoginCustomerDoc:
     }
 
 
-class ConfirmCodeToResetPasswordCustomerDoc:
-    tags = (["customer"],)
+class ConfirmCodeToResetPasswordCustomerDoc(BaseCustomerDoc):
     operation_description = "Confirmação de redefinição de senha"
     request_body = openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -117,8 +130,7 @@ class ConfirmCodeToResetPasswordCustomerDoc:
     }
 
 
-class ForgetPasswordDoc:
-    tags = (["customer"],)
+class ForgetPasswordDoc(BaseCustomerDoc):
     operation_description = "Solicitação de redefinição de senha"
     request_body = openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -147,8 +159,7 @@ class ForgetPasswordDoc:
     }
 
 
-class NewPasswordDoc:
-    tags = (["customer"],)
+class NewPasswordDoc(BaseCustomerDoc):
     operation_description = "Criação de nova senha"
     request_body = openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -168,8 +179,7 @@ class NewPasswordDoc:
     }
 
 
-class RefreshLoginDoc:
-    tags = (["customer"],)
+class RefreshLoginDoc(BaseCustomerDoc):
     operation_description = "Autenticação de cliente"
     request_body = openapi.Schema(
         type=openapi.TYPE_OBJECT,
@@ -203,5 +213,23 @@ class RefreshLoginDoc:
         ),
         400: "Erro de validação",
         401: "Erro de autenticação",
+        500: "Erro interno do servidor",
+    }
+
+
+class ConfirmEmailDoc(BaseCustomerDoc):
+    operation_description = "Confirmação de e-mail"
+    manual_parameters = [
+        openapi.Parameter(
+            "/",
+            openapi.IN_QUERY,
+            description="Query criptografada enviada para o email na rota de registro de cliente",
+            type=openapi.TYPE_STRING,
+            required=True,
+        ),
+    ]
+    responses = {
+        302: "Redirecionamento para a callback url enviada no registro de cliente",
+        400: "Erro de validação",
         500: "Erro interno do servidor",
     }

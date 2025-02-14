@@ -1,5 +1,5 @@
 from typing import cast
-from main.app import BaseController, no_content, HttpResponse, HttpRequest
+from main.app import BaseController, HttpResponse, HttpRequest, create
 from main.contracts import ValidatorContract
 from modules.customer.contracts import RegisterUsecaseContract
 from modules.customer.infra import RegisterCustomerSchema
@@ -16,8 +16,13 @@ class RegisterCustomerController(BaseController):
 
     async def execute(self, request: HttpRequest) -> HttpResponse:
         try:
-            self.validator.validate(request.get("body") or {})
+            data = {
+                **(request.get("body") or {}),
+                "callback_url": (request.get("query") or {}).get("callback_url"),
+            }
+            print("controller", data)
+            self.validator.validate(data)
             await self.usecase.perform(self.validator.to_dict())  # type: ignore
-            return no_content()
+            return create({})
         except Exception as e:
             return self._format_response_error(e)

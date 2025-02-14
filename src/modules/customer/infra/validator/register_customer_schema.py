@@ -8,6 +8,7 @@ class RegisterCustomerSchema(BaseModel):
     password: str = Field(..., min_length=8, max_length=70)
     confirmed_password: str = Field(..., min_length=8, max_length=70)
     accepted_terms: bool = Field(...)
+    callback_url: str = Field(...)
 
     @field_validator("password", "confirmed_password")
     def validate_passwords(cls, v):

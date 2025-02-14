@@ -21,12 +21,13 @@ def create_handler() -> HandlerContract:
         def __init__(self) -> None:
             pass
 
-        def handle(self, event: EventBaseClass) -> None:
+        async def handle(self, event: EventBaseClass) -> None:
             pass
 
     return HandlerStub()
 
 
+@pytest.mark.asyncio
 class TestDispatcherEvents:
     def setup_method(self) -> None:
         self.dispatcher = DispatcherEvents()
@@ -38,7 +39,7 @@ class TestDispatcherEvents:
         self.handler2 = create_handler()
         self.handler3 = create_handler()
 
-    def test_register(self):
+    async def test_register(self):
         self.dispatcher.register(self.event1.get_name(), self.handler1)
 
         assert len(self.dispatcher.handlers()[self.event1.get_name()]) == 1
@@ -52,7 +53,7 @@ class TestDispatcherEvents:
             self.handler2,
         ]
 
-    def test_error_if_handle_exists_in_event(self):
+    async def test_error_if_handle_exists_in_event(self):
         self.dispatcher.register(self.event1.get_name(), self.handler1)
         with pytest.raises(CustomError) as e:
             self.dispatcher.register(self.event1.get_name(), self.handler1)
@@ -65,13 +66,13 @@ class TestDispatcherEvents:
             ],
         }
 
-    def test_has(self):
+    async def test_has(self):
         self.dispatcher.register(self.event1.get_name(), self.handler1)
 
         assert self.dispatcher.has(self.event1.get_name(), self.handler1)
         assert not self.dispatcher.has(self.event1.get_name(), self.handler2)
 
-    def test_clear_handlers(self):
+    async def test_clear_handlers(self):
         self.dispatcher.register(self.event1.get_name(), self.handler1)
         self.dispatcher.register(self.event1.get_name(), self.handler2)
 
@@ -83,7 +84,7 @@ class TestDispatcherEvents:
 
         assert self.dispatcher.handlers() == {}
 
-    def test_remove_handler(self):
+    async def test_remove_handler(self):
         self.dispatcher.register(self.event1.get_name(), self.handler1)
         self.dispatcher.register(self.event1.get_name(), self.handler2)
 
@@ -99,7 +100,7 @@ class TestDispatcherEvents:
 
         assert self.dispatcher.handlers() == {self.event1.get_name(): [self.handler2]}
 
-    def test_dispatch(self):
+    async def test_dispatch(self):
         self.dispatcher.register(self.event1.get_name(), self.handler1)
         self.dispatcher.register(self.event1.get_name(), self.handler2)
         self.dispatcher.register(self.event2.get_name(), self.handler3)

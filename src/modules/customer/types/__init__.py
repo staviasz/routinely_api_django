@@ -3,3 +3,5 @@ from .refresh_login_dto import RefreshLoginInput, RefreshLoginOutput
 from .forget_password_dto import ForgetPasswordInput, ForgetPasswordOutput
 from .confirm_code_to_reset_password_dto import ConfirmCodeToResetPasswordInput
 from .new_password_dto import NewPasswordInput, NewPasswordOutput
+from .register_customer_dto import RegisterCustomerInput, RegisterCustomerOutput
+from .confirm_email_dto import ConfirmEmailInput, ConfirmEmailOutput

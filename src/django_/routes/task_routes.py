@@ -1,5 +1,5 @@
 from django.urls import path
-from view.task_views import (
+from django_.view.task_views import (
     TaskViews as T,
 )
 

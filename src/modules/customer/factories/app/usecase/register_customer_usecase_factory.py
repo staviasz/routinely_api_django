@@ -1,9 +1,8 @@
-from modules.customer import (
+from modules.customer.app.usecases.register_usecase import RegisterUsecase
+from modules.customer.contracts.usecases.register_usecase_contract import (
     RegisterUsecaseContract,
-    RegisterUsecase,
-    CreatedCustomerEvent,
-    dispatcher_customer,
 )
+from modules.customer.events import CreatedCustomerEvent, dispatcher_customer
 from modules.customer.factories.infra.db.repository_customer_factory import (
     repository_customer_factory,
 )

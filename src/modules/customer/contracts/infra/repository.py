@@ -31,11 +31,16 @@ class NewPasswordRepositoryContract(FindFieldContract[T], UpdateContract[T]):
     pass
 
 
+class ConfirmEmailRepositoryContract(FindFieldContract[T], UpdateContract[T]):
+    pass
+
+
 class CustomerRepositoryContract(
     RegisterRepositoryContract,
     LoginRepositoryContract,
     ForgetPasswordRepositoryContract,
     ConfirmCodeToResetPasswordRepositoryContract,
     NewPasswordRepositoryContract,
+    ConfirmEmailRepositoryContract,
 ):
     pass

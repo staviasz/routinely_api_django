@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 
-from adapter.drf_adapter import DRFAdapter
+from django_.adapter.drf_adapter import DRFAdapter
 from modules.tasks.factories import (
     create_task_controller_factory,
     update_task_controller_factory,
@@ -11,7 +11,12 @@ from modules.tasks.factories import (
 )
 
 from drf_yasg.utils import swagger_auto_schema
-from view.docs.task_docs import CreateTaskDoc, DeleteTaskDoc, ListTaskDoc, UpdateTaskDoc
+from django_.view.docs.task_docs import (
+    CreateTaskDoc,
+    DeleteTaskDoc,
+    ListTaskDoc,
+    UpdateTaskDoc,
+)
 
 
 class TaskViews:

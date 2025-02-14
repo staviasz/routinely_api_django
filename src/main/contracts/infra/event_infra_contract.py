@@ -24,7 +24,7 @@ class EventBaseClass(ABC):
 
 
 class HandlerContract(Protocol):
-    def handle(self, event: EventBaseClass) -> None:
+    async def handle(self, event: EventBaseClass) -> None:
         pass
 
 

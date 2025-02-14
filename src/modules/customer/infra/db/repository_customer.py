@@ -92,7 +92,6 @@ class RepositoryCustomer(CustomerRepositoryContract):
         account: AccountDBModel,
         aggregate: CustomerAggregate,
     ):
-        print("update", aggregate.to_dict)
         with transaction.atomic():
             customer = CustomerDBModel.objects.get(id=aggregate.id)
             customer.name = aggregate.name
@@ -118,7 +117,6 @@ class RepositoryCustomer(CustomerRepositoryContract):
         first_query = (
             "customer" if field in ["id", "name", "accepted_terms"] else "account"
         )
-        print(first_query)
 
         try:
             customer, account = None, None
@@ -137,7 +135,8 @@ class RepositoryCustomer(CustomerRepositoryContract):
 
             return customer, account
 
-        except Exception:
+        except Exception as e:
+            print(e)
             raise CustomError(NotFoundError("Customer not found."))
 
     def encode(self, value: str) -> str:

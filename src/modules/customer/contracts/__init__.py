@@ -5,6 +5,7 @@ from .infra.repository import (
     ForgetPasswordRepositoryContract,
     ConfirmCodeToResetPasswordRepositoryContract,
     NewPasswordRepositoryContract,
+    ConfirmEmailRepositoryContract,
 )
 from .infra.encryption import EncryptionContract
 from .infra.cache_infra_contracts import CacheContract
@@ -16,3 +17,4 @@ from .usecases.confirm_code_to_reset_password_usecase_contract import (
     ConfirmCodeToResetPasswordUsecaseContract,
 )
 from .usecases.new_password_usecase_contract import NewPasswordUsecaseContract
+from .usecases.confirm_email_usecase_contract import ConfirmEmailUsecaseContract

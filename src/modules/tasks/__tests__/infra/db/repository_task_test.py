@@ -20,7 +20,11 @@ entity = TaskEntity(data)
 
 @pytest.mark.asyncio
 @pytest.mark.usefixtures("setup_database")
-@pytest.mark.parametrize("fake_customer_db", [customer_id], indirect=True)
+@pytest.mark.parametrize(
+    "fake_customer_db",
+    [{"id": customer_id, "email": "testTask@test.com"}],
+    indirect=True,
+)
 class TestRepositoryTask:
     def setup_method(self):
         self.data = data

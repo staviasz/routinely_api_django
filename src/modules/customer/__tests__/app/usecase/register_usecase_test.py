@@ -71,6 +71,7 @@ class TestRegisterUsecase:
             "email": "G0s7B@example.com",
             "password": "@Teste123",
             "accepted_terms": True,
+            "callback_url": "",
         }
 
         assert self.event.get_payload() == {}
@@ -80,4 +81,5 @@ class TestRegisterUsecase:
         assert self.event.get_payload() == {
             "name": "Teste",
             "email": "G0s7B@example.com",
+            "callback_url": "",
         }

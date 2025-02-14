@@ -8,6 +8,7 @@ from .usecases.confirm_code_to_reset_password_usecase import (
 )
 from .usecases.new_password_usecase import NewPasswordUsecase
 from .usecases.refresh_login_usecase import RefreshLoginUsecase
+from .usecases.confirm_email_usecase import ConfirmEmailUsecase
 
 from .controllers.register_customer_controller import RegisterCustomerController
 from .controllers.login_controller import LoginController
@@ -17,3 +18,4 @@ from .controllers.confirm_code_to_reset_password_controller import (
 )
 from .controllers.new_password_controller import NewPasswordController
 from .controllers.refresh_login_controller import RefreshLoginController
+from .controllers.confirm_email_controller import ConfirmEmailController
