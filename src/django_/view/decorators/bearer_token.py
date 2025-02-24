@@ -14,7 +14,6 @@ def bearer_token(func):
     def wrapper(self, request, *args, **kwargs):
         token = request.headers.get("Authorization")
 
-        print(token)
         if not token:
             return Response(
                 {"message": "Token not found"},
@@ -26,8 +25,7 @@ def bearer_token(func):
                 session_service.verify_token(token.split("Bearer ")[1])
             )
             request.user = payload
-        except Exception as e:
-            print("error", e)
+        except Exception:
             return Response(
                 {"message": "Invalid token"},
                 status=401,

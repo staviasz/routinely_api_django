@@ -115,10 +115,10 @@ class ConfirmCodeToResetPasswordCustomerDoc(BaseCustomerDoc):
                 description="Código de enviado pelo e-mail",
                 example="123456",
             ),
-            "email": openapi.Schema(
+            "account_id": openapi.Schema(
                 type=openapi.TYPE_STRING,
-                description="Email do cliente",
-                example="john@doe.com",
+                description="ID da conta",
+                example="fb0e2f3b-a90e-4f3c-b292-11bbf44a637a",
             ),
         },
         required=["code", "email"],
@@ -164,13 +164,26 @@ class NewPasswordDoc(BaseCustomerDoc):
     request_body = openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
-            "email": openapi.Schema(
+            "account_id": openapi.Schema(
                 type=openapi.TYPE_STRING,
-                description="Email do cliente",
-                example="john@doe.com",
+                description="ID da conta do cliente",
+                example="fb0e2f3b-a90e-4f3c-b292-11bbf44a637a",
+            ),
+            "password": openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description=(
+                    "Senha do cliente deve ter 6 ou mais caracteres, uma letra "
+                    "maiúscula, uma letra minúscula, um número e um caractere especial"
+                ),
+                example="@Test123",
+            ),
+            "confirmed_password": openapi.Schema(
+                type=openapi.TYPE_STRING,
+                description="Confirmação de senha do cliente",
+                example="@Test123",
             ),
         },
-        required=["email"],
+        required=["account_id", "password", "confirmed_password"],
     )
     responses = {
         204: "Sucesso",

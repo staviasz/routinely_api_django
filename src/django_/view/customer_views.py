@@ -106,8 +106,6 @@ class RefreshLoginView(APIView):
     )
     def post(self, request: Request) -> Response:
         adapter = DRFAdapter(refresh_login_controller_factory())
-        print("esta passando mesmo sem o token")
-
         return adapter.adapt(request)
 
 

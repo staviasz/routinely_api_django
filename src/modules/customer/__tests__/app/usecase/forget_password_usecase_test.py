@@ -5,7 +5,7 @@ from main.infra import DispatcherEvents, RepositoryInMemory
 from modules.customer import (
     CustomerAggregate,
     ForgotPasswordEvent,
-    CacheForgetPasswordCode,
+    Cache,
 )
 from modules.customer.app.usecases.forget_password_usecase import ForgetPasswordUsecase
 
@@ -18,7 +18,7 @@ class ForgetPasswordRepositoryInMemory(RepositoryInMemory[CustomerAggregate]):
 class TestForgetPasswordUsecase:
     def setup_method(self):
         self.repository = ForgetPasswordRepositoryInMemory()
-        self.cache = CacheForgetPasswordCode()
+        self.cache = Cache()
         self.event = ForgotPasswordEvent()
         self.dispatcher = DispatcherEvents()
         self.usecase = ForgetPasswordUsecase(

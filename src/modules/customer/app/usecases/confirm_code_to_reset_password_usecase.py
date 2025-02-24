@@ -4,7 +4,7 @@ from modules.customer.contracts import (
     ConfirmCodeToResetPasswordUsecaseContract,
     ConfirmCodeToResetPasswordRepositoryContract,
 )
-from modules.customer.infra.cache.forget_password_code import CacheForgetPasswordCode
+from modules.customer.infra.cache.cache import Cache
 from modules.customer.types import ConfirmCodeToResetPasswordInput
 
 
@@ -12,14 +12,14 @@ class ConfirmCodeToResetPasswordUsecase(ConfirmCodeToResetPasswordUsecaseContrac
     def __init__(
         self,
         repository: ConfirmCodeToResetPasswordRepositoryContract,
-        cache: CacheForgetPasswordCode,
+        cache: Cache,
     ) -> None:
         self.cache = cache
         self.repository = repository
 
     async def perform(self, data: ConfirmCodeToResetPasswordInput) -> None:
-        customer = await self.repository.find_field("email", data["email"])
-        code = self.cache.get(data["email"])
+        customer = await self.repository.find_field("id", data["id"])
+        code = self.cache.get(customer.email)
 
         if not code:
             raise CustomError(BadRequestError("Expired code."))

@@ -49,12 +49,18 @@ class Framework(TypedDict):
     debug: bool
 
 
+class Queque(TypedDict):
+    port: int
+    host: str
+
+
 class EnvTyped(TypedDict):
     env: str
     send_email_customer: SendEmailCustomer
     backend: Backend
     framework: Framework
     database: Database
+    queque: Queque
 
 
 env: EnvTyped = {
@@ -86,5 +92,9 @@ env: EnvTyped = {
         "password": os.getenv("DATABASE_PASSWORD", ""),
         "host": os.getenv("DATABASE_HOST", ""),
         "port": int(os.getenv("DATABASE_PORT", 0)),
+    },
+    "queque": {
+        "port": int(os.getenv("QUEQUE_PORT", 0)),
+        "host": os.getenv("QUEQUE_HOST", ""),
     },
 }

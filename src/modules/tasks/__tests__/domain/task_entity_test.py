@@ -37,7 +37,6 @@ class TestTaskEntity:
                 TaskEntity(item["data"])
 
             formate_error = error.value.formate_errors
-            print(formate_error)
             assert formate_error == {
                 "code_error": 400,
                 "messages_error": [f"The Type must be one of: {str_types}"],
@@ -119,7 +118,6 @@ class TestTaskEntity:
                 TaskEntity(item["data"])
 
             formate_error = error.value.formate_errors
-            print(formate_error)
             assert formate_error == {
                 "code_error": 400,
                 "messages_error": [f"The category must be one of: {str_categories}"],

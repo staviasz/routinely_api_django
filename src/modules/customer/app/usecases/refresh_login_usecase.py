@@ -13,5 +13,4 @@ class RefreshLoginUsecase(RefreshLoginUsecaseContract):
         self.auth = auth
 
     async def perform(self, data: RefreshLoginInput) -> RefreshLoginOutput:
-        print(data)
         return await self.auth.handle({"tokens": data})

@@ -16,9 +16,7 @@ class DRFAdapter:
             "params": request.parser_context.get("kwargs", {}),
         }
 
-        print("antes do controller")
         response = asyncio.run(self.controller.execute(controller_request))
-        print("depois do controller")
 
         return Response(
             status=response["status"],
@@ -32,9 +30,7 @@ class DRFAdapter:
 
         format_dict = {}
         for key, value in body.items():
-            print(key, value)
             format_dict[key] = value[0] if isinstance(value, list) else value
-            print(format_dict)
         return format_dict
 
     def __normalize_query(self, query: dict):

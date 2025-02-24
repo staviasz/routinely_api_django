@@ -20,7 +20,6 @@ class BaseController(ABC):
         pass
 
     def _format_response_error(self, error: Exception) -> HttpResponse:
-        print("error", error)
         if not isinstance(error, CustomError):
             return internal_server_error()
 

@@ -47,7 +47,6 @@ class TestUpdateTaskController:
 
     async def test_execute_return_errors_if_body_is_empty(self):
         response = await self.controller.execute({"headers": {}})
-        print(response)
         assert response["status"] == 400
         assert response["body"] == {
             "message": [
@@ -124,7 +123,6 @@ class TestUpdateTaskController:
             response = await self.controller.execute(
                 {"headers": {"user_id": self.user_id}, "body": item["body"]}
             )
-            print(response)
             assert response["status"] == 400
             assert response["body"] == {
                 "message": item["message"],
@@ -277,7 +275,6 @@ class TestUpdateTaskController:
             response = await self.controller.execute(
                 {"headers": {"user_id": self.user_id}, "body": item["body"]}
             )
-            print(response)
             assert response["status"] == 400
             assert response["body"] == {
                 "message": item["message"],
@@ -307,7 +304,6 @@ class TestUpdateTaskController:
             response = await self.controller.execute(
                 {"headers": {"user_id": self.user_id}, "body": item["body"]}
             )
-            print(response)
             assert response["status"] == 400
             assert response["body"] == {
                 "message": item["message"],

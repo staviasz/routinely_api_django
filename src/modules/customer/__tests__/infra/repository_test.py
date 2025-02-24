@@ -59,7 +59,6 @@ class TestCustomerRepository:
 
     async def test_find_field_by_customer(self):
         customer = await self.repository.find_field("name", self.aggregate.name)
-        print(customer.to_dict)
         assert customer.to_dict == self.aggregate.to_dict
 
     async def test_find_field_by_account(self):

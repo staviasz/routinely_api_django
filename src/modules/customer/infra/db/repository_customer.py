@@ -131,12 +131,9 @@ class RepositoryCustomer(CustomerRepositoryContract):
                     return None
                 customer = customer_query("id", account.id)
 
-            print("esse aqui", customer, account)
-
             return customer, account
 
-        except Exception as e:
-            print(e)
+        except Exception:
             raise CustomError(NotFoundError("Customer not found."))
 
     def encode(self, value: str) -> str:

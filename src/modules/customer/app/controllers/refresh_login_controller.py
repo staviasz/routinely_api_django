@@ -14,7 +14,6 @@ class RefreshLoginController(BaseController):
 
     async def execute(self, request: HttpRequest) -> HttpResponse:
         try:
-            print(request)
             self.validator.validate(request.get("body") or {})
             response = await self.usecase.perform(self.validator.to_dict())  # type: ignore
             return ok({**response})

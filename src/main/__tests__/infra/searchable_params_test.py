@@ -24,7 +24,6 @@ class TestSearchableParams:
 
         for item in arrange:
             searchable_params = SearchParams({"page": item["page"]})
-            print(item)
             assert searchable_params.page == item["expected"]
 
     def test_searchable_params_prop_per_page(self):
@@ -93,8 +92,6 @@ class TestSearchableParams:
 
         for item in arrange:
             searchable_params = SearchParams({"order": item["order"]})
-            print(item)
-            print(searchable_params.order)
             assert searchable_params.order == item["expected"]
 
 

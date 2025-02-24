@@ -3,7 +3,7 @@ from pydantic import BaseModel, EmailStr, Field, field_validator
 
 class ConfirmCodeToResetPasswordSchema(BaseModel):
     code: str = Field(..., min_length=6, max_length=6)
-    email: EmailStr = Field(...)
+    account_id: str = Field(...)
 
     @field_validator("code")
     def validate_code(cls, v):

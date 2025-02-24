@@ -30,7 +30,6 @@ class RepositorySession(SessionRepositoryContract):
         }
 
     def _mapper_repository_to_domain(self, session: SessionDBModel) -> SessionEntity:
-        print("session", session.customer_id)
         return SessionEntity(
             {
                 "id": str(session.id),

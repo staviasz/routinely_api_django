@@ -14,7 +14,6 @@ class UpdateTaskController(BaseController):
             user_id = request.get("headers").get("user_id")
             body = request.get("body", {})
             data = {"user_id": user_id, **body}
-            print(data)
 
             self.validator.validate(data)
             await self.usecase.perform(self.validator.to_dict())

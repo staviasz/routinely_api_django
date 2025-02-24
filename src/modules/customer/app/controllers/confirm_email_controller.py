@@ -26,7 +26,7 @@ class ConfirmEmailController(BaseController):
     async def execute(self, request: HttpRequest) -> HttpResponse:
         try:
             query = list((request.get("query") or {}).values())[0]
-            query_decrypt_split = self.crypto.decrypt(query).split("-")
+            query_decrypt_split = self.crypto.decrypt(query).split("--")
             data = {
                 "email": query_decrypt_split[0],
                 "callback_url": query_decrypt_split[1],

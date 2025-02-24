@@ -4,7 +4,7 @@ T = TypeVar("T")
 
 
 class CacheContract(Protocol, Generic[T]):
-    def get(self, key: str) -> T:
+    def get(self, key: str) -> T | None:
         pass
 
     def set(self, key: str, value: T) -> None:

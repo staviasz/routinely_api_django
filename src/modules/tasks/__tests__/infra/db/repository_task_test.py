@@ -80,8 +80,6 @@ class TestRepositoryTask:
             "category": task.category,
             "finally_datetime": task.finally_datetime.replace(tzinfo=None),
         }
-        print(excepted_result)
-        print(new_entity.to_dict())
         assert excepted_result == new_entity.to_dict()
 
     async def test_find_field_raise_error_if_field_not_exist(self, fake_customer_db):
@@ -103,9 +101,6 @@ class TestRepositoryTask:
         task = await self.repository.find_field("id", self.entity.id)
 
         expected_task = await self.repository.mapper_repository_to_domain(task_db)
-        print(task.to_dict())
-        print(expected_task.to_dict())
-        print(self.entity.to_dict())
         assert expected_task.to_dict() == task.to_dict() == self.entity.to_dict()
 
     async def test_update_task_raise_error_if_field_not_exist(self, fake_customer_db):

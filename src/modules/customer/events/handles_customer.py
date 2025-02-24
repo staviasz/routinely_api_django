@@ -21,7 +21,7 @@ class SendEmailRegisterCustomerHandler(HandlerContract):
     async def handle(self, event: EventBaseClass) -> None:
         email_customer = event.get_payload()["email"]
         callback_url = event.get_payload()["callback_url"]
-        url = f"{self.__backend_url}/customer/?{self.__cryptography.encrypt(f"{email_customer}-{callback_url}")}"
+        url = f"{self.__backend_url}/customer/?{self.__cryptography.encrypt(f"{email_customer}--{callback_url}")}"
         year = datetime.date.today().year
 
         data: SendEmailModel = {
@@ -29,7 +29,6 @@ class SendEmailRegisterCustomerHandler(HandlerContract):
             "to_email": email_customer,
             "subject": "Cadastro realizado com sucesso",
         }
-        print("payload", data)
 
         self.__mailing.send_email(data)
 

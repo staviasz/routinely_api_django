@@ -4,7 +4,7 @@ from modules.customer.contracts import (
     ForgetPasswordUsecaseContract,
     ForgetPasswordRepositoryContract,
 )
-from modules.customer.infra import CacheForgetPasswordCode
+from modules.customer.infra import Cache
 from modules.customer.types import ForgetPasswordInput, ForgetPasswordOutput
 
 
@@ -13,7 +13,7 @@ class ForgetPasswordUsecase(ForgetPasswordUsecaseContract):
     def __init__(
         self,
         repository: ForgetPasswordRepositoryContract,
-        cache: CacheForgetPasswordCode,
+        cache: Cache,
         event: EventBaseClass,
         dispatcher: DispatcherContract,
     ) -> None:

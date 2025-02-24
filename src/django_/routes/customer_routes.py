@@ -15,7 +15,7 @@ urlpatterns = [
     path("refresh-auth/", RefreshLoginView.as_view(), name="refresh-customer"),
     path("new-password/", NewPasswordView.as_view(), name="new-password-customer"),
     path(
-        "forget-password/",
+        "forgot-password/",
         ForgetPasswordView.as_view(),
         name="forget-password-customer",
     ),

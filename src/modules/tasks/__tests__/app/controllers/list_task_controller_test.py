@@ -33,7 +33,6 @@ class TestListTaskController:
 
         for item in arrange:
             response = await self.controller.execute({"headers": item["headers"]})
-            print(response)
             assert response["status"] == 400
             assert response["body"] == {
                 "message": item["message"],
@@ -63,7 +62,6 @@ class TestListTaskController:
             response = await self.controller.execute(
                 {"headers": {"user_id": self.user_id}, "body": item["body"]}
             )
-            print(response)
             assert response["status"] == 400
             assert response["body"] == {
                 "message": item["message"],
@@ -89,7 +87,6 @@ class TestListTaskController:
             response = await self.controller.execute(
                 {"headers": {"user_id": self.user_id}, "body": item["body"]}
             )
-            print(response)
             assert response["status"] == 400
             assert response["body"] == {
                 "message": item["message"],

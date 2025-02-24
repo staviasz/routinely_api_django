@@ -17,7 +17,6 @@ class RefreshSessionService(SessionService):
 
     async def handle(self, props: SessionInput) -> SessionOutput:
         tokens = props.get("tokens")
-        print("tokens", tokens)
         if not tokens or "access_token" not in tokens or "refresh_token" not in tokens:
             raise CustomError(BadRequestError("Invalid access token or refresh token."))
 

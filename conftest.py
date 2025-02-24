@@ -25,7 +25,6 @@ def setup_database():
 
 @pytest.fixture(scope="function")
 def fake_customer_db(request):
-    print(request.param)
     param = request.param
     customer_data = {
         "id": param["id"],

@@ -125,8 +125,6 @@ class TestListTaskUsecase:
 
         for item in arrange:
             result = await self.usecase.perform(item)
-            print("result", result)
-            print("expected", item["expected"])
 
             expect = []
             for task in item["expected"]:

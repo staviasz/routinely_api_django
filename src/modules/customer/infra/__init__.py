@@ -9,6 +9,6 @@ from .validator.refresh_login_schema import RefreshLoginSchema
 from .validator.confirm_email_schema import ConfirmEmailSchema
 
 from .crypto.encryption_to_send_email import EncryptionToSendEmailAdapter
-from .cache.forget_password_code import CacheForgetPasswordCode
+from .cache.cache import Cache
 
 from .db.repository_customer import RepositoryCustomer

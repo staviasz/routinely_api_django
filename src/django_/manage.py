@@ -8,7 +8,6 @@ import sys
 def main():
     """Run administrative tasks."""
     BASE_DIR = Path(__file__).resolve().parent.parent
-    print("manage.py", BASE_DIR)
     sys.path.append(str(BASE_DIR))
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 

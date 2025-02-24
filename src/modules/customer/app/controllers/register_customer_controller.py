@@ -20,7 +20,6 @@ class RegisterCustomerController(BaseController):
                 **(request.get("body") or {}),
                 "callback_url": (request.get("query") or {}).get("callback_url"),
             }
-            print("controller", data)
             self.validator.validate(data)
             await self.usecase.perform(self.validator.to_dict())  # type: ignore
             return create({})

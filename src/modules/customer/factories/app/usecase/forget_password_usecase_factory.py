@@ -1,7 +1,7 @@
 from modules.customer import (
     ForgetPasswordUsecaseContract,
     ForgetPasswordUsecase,
-    CacheForgetPasswordCode,
+    Cache,
     ForgotPasswordEvent,
     dispatcher_customer,
 )
@@ -12,7 +12,7 @@ from modules.customer.factories.infra.db.repository_customer_factory import (
 
 def forget_password_usecase_factory() -> ForgetPasswordUsecaseContract:
     repository = repository_customer_factory()
-    cache = CacheForgetPasswordCode()
+    cache = Cache()
     event = ForgotPasswordEvent()
     dispatcher = dispatcher_customer
     return ForgetPasswordUsecase(
