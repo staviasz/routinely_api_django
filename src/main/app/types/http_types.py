@@ -6,6 +6,7 @@ class HttpRequest(TypedDict, total=False):
     query: Optional[Dict[str, Any]]
     headers: Optional[Dict[str, Any]]
     body: Optional[Dict[str, Any]]
+    session: Optional[Dict[str, Any]]
 
 
 class HttpResponse(TypedDict, total=False):

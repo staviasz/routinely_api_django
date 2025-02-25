@@ -46,11 +46,11 @@ class TestUpdateTaskController:
         }
 
     async def test_execute_return_errors_if_body_is_empty(self):
-        response = await self.controller.execute({"headers": {}})
+        response = await self.controller.execute({"session": {}, "params": {}})
         assert response["status"] == 400
         assert response["body"] == {
             "message": [
-                "id: Field required",
+                "id: Input should be a valid string",
                 "user_id: Input should be a valid string",
             ]
         }
@@ -58,7 +58,8 @@ class TestUpdateTaskController:
     async def test_execute_validate_without_fields_to_update(self):
         response = await self.controller.execute(
             {
-                "headers": {"user_id": self.user_id},
+                "session": {"user_id": self.user_id},
+                "params": {"id": self.data["id"]},
                 "body": {"id": self.data["id"]},
             }
         )
@@ -68,15 +69,15 @@ class TestUpdateTaskController:
     async def test_execute_validate_field_user_id(self):
         arrange = [
             {
-                "headers": {"user_id": 1},
+                "session": {"user_id": 1},
                 "message": ["user_id: Input should be a valid string"],
             },
             {
-                "headers": {"user_id": True},
+                "session": {"user_id": True},
                 "message": ["user_id: Input should be a valid string"],
             },
             {
-                "headers": {},
+                "session": {},
                 "message": ["user_id: Input should be a valid string"],
             },
         ]
@@ -84,7 +85,8 @@ class TestUpdateTaskController:
         for item in arrange:
             response = await self.controller.execute(
                 {
-                    "headers": item["headers"],
+                    "session": item["session"],
+                    "params": {"id": self.data["id"]},
                     "body": self.data,
                 }
             )
@@ -121,7 +123,11 @@ class TestUpdateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {
+                    "session": {"user_id": self.user_id},
+                    "params": {"id": self.data["id"]},
+                    "body": item["body"],
+                }
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -149,7 +155,11 @@ class TestUpdateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {
+                    "session": {"user_id": self.user_id},
+                    "params": {"id": self.data["id"]},
+                    "body": item["body"],
+                }
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -184,7 +194,11 @@ class TestUpdateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {
+                    "session": {"user_id": self.user_id},
+                    "params": {"id": self.data["id"]},
+                    "body": item["body"],
+                }
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -211,7 +225,11 @@ class TestUpdateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {
+                    "session": {"user_id": self.user_id},
+                    "params": {"id": self.data["id"]},
+                    "body": item["body"],
+                }
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -240,7 +258,11 @@ class TestUpdateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {
+                    "session": {"user_id": self.user_id},
+                    "params": {"id": self.data["id"]},
+                    "body": item["body"],
+                }
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -273,7 +295,11 @@ class TestUpdateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {
+                    "session": {"user_id": self.user_id},
+                    "params": {"id": self.data["id"]},
+                    "body": item["body"],
+                }
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -302,7 +328,11 @@ class TestUpdateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {
+                    "session": {"user_id": self.user_id},
+                    "params": {"id": self.data["id"]},
+                    "body": item["body"],
+                }
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -324,7 +354,11 @@ class TestUpdateTaskController:
             self.usecase.perform.return_value = {"id": "any_id"}
 
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": self.data}
+                {
+                    "session": {"user_id": self.user_id},
+                    "params": {"id": self.data["id"]},
+                    "body": self.data,
+                }
             )
             assert response["status"] == 204
             assert response["body"] is None

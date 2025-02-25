@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 
 from django_.adapter.drf_adapter import DRFAdapter
+from django_.view.decorators.bearer_token import bearer_token
 from modules.tasks.factories import (
     create_task_controller_factory,
     update_task_controller_factory,
@@ -27,6 +28,7 @@ class TaskViews:
             request_body=CreateTaskDoc.request_body,
             responses=CreateTaskDoc.responses,
         )
+        @bearer_token
         def post(self, request: Request) -> Response:
             adapter = DRFAdapter(create_task_controller_factory())
             return adapter.adapt(request)
@@ -37,6 +39,7 @@ class TaskViews:
             manual_parameters=ListTaskDoc.manual_parameters,
             responses=ListTaskDoc.responses,
         )
+        @bearer_token
         def get(self, request: Request) -> Response:
             adapter = DRFAdapter(list_task_controller_factory())
             return adapter.adapt(request)
@@ -49,9 +52,10 @@ class TaskViews:
             request_body=UpdateTaskDoc.request_body,
             responses=UpdateTaskDoc.responses,
         )
-        def put(self, request: Request) -> Response:
+        @bearer_token
+        def put(self, request: Request, id) -> Response:
             adapter = DRFAdapter(update_task_controller_factory())
-            return adapter.adapt(request)
+            return adapter.adapt(request, id=id)
 
         @swagger_auto_schema(
             tags=DeleteTaskDoc.tags,
@@ -59,6 +63,7 @@ class TaskViews:
             request_body=DeleteTaskDoc.request_body,
             responses=DeleteTaskDoc.responses,
         )
-        def delete(self, request: Request) -> Response:
+        @bearer_token
+        def delete(self, request: Request, id) -> Response:
             adapter = DRFAdapter(delete_task_controller_factory())
-            return adapter.adapt(request)
+            return adapter.adapt(request, id=id)

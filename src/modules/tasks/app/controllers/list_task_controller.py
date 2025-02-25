@@ -9,7 +9,7 @@ class ListTaskController(BaseController):
 
     async def execute(self, request):
         try:
-            user_id = request.get("headers").get("user_id")
+            user_id = request.get("session").get("user_id")
             body = request.get("body")
             data = {
                 "user_id": user_id,

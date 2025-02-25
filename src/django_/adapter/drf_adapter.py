@@ -1,4 +1,5 @@
 import asyncio
+import json
 from rest_framework.request import Request
 from rest_framework.response import Response
 from main import BaseController, HttpRequest
@@ -9,11 +10,13 @@ class DRFAdapter:
         self.controller = controller
 
     def adapt(self, request: Request, **kwargs) -> Response:
+
         controller_request: HttpRequest = {
             "headers": dict(request.headers),
-            "body": self.__normalize_body(dict(request.data)),
+            "body": dict(request.data),
             "query": self.__normalize_query(dict(request.GET)),
             "params": request.parser_context.get("kwargs", {}),
+            "session": request.session,
         }
 
         response = asyncio.run(self.controller.execute(controller_request))
@@ -23,15 +26,6 @@ class DRFAdapter:
             data=response.get("body"),
             headers=response.get("headers"),
         )
-
-    def __normalize_body(self, body: dict):
-        if body is None:
-            return None
-
-        format_dict = {}
-        for key, value in body.items():
-            format_dict[key] = value[0] if isinstance(value, list) else value
-        return format_dict
 
     def __normalize_query(self, query: dict):
         if query is None:

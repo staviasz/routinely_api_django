@@ -32,7 +32,7 @@ class CreateTaskDoc:
                 description=f"Tipo da tarefa, pode ser: {', '.join(get_args(TaskType))}",
                 example="habit",
             ),
-            "datetime": openapi.Schema(
+            "date_time": openapi.Schema(
                 type=openapi.TYPE_STRING,
                 description="Data de início da tarefa",
                 example="2022-01-01 00:00",

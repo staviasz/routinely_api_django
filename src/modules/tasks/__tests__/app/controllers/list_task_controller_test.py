@@ -17,22 +17,22 @@ class TestListTaskController:
     async def test_execute_validate_user_id(self):
         arrange = [
             {
-                "headers": {"user_id": ""},
+                "session": {"user_id": ""},
                 "message": ["user_id: String should have at least 1 character"],
             },
             {
-                "headers": {"user_id": 1},
+                "session": {"user_id": 1},
                 "message": ["user_id: Input should be a valid string"],
             },
             {
-                "headers": {"user_id": True},
+                "session": {"user_id": True},
                 "message": ["user_id: Input should be a valid string"],
             },
-            {"headers": {}, "message": ["user_id: Input should be a valid string"]},
+            {"session": {}, "message": ["user_id: Input should be a valid string"]},
         ]
 
         for item in arrange:
-            response = await self.controller.execute({"headers": item["headers"]})
+            response = await self.controller.execute({"session": item["session"]})
             assert response["status"] == 400
             assert response["body"] == {
                 "message": item["message"],
@@ -60,7 +60,7 @@ class TestListTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {"session": {"user_id": self.user_id}, "body": item["body"]}
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -85,7 +85,7 @@ class TestListTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {"session": {"user_id": self.user_id}, "body": item["body"]}
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -95,7 +95,7 @@ class TestListTaskController:
     async def test_execute_error_usecase(self):
         self.usecase.perform.side_effect = Exception("error")
         response = await self.controller.execute(
-            {"headers": {"user_id": self.user_id}, "body": self.data}
+            {"session": {"user_id": self.user_id}, "body": self.data}
         )
         assert response["status"] == 500
         assert response["body"] == {"message": ["Internal Server Error"]}
@@ -104,7 +104,7 @@ class TestListTaskController:
         with patch.object(self.usecase, "perform") as mock:
             self.usecase.perform.return_value = {"tasks": []}
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": self.data}
+                {"session": {"user_id": self.user_id}, "body": self.data}
             )
             assert response["status"] == 200
             assert response["body"] == {"tasks": []}

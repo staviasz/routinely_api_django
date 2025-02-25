@@ -21,10 +21,11 @@ def bearer_token(func):
             )
         try:
             session_service = create_session_service_factory()
+
             payload = asyncio.run(
                 session_service.verify_token(token.split("Bearer ")[1])
             )
-            request.user = payload
+            request.session = payload
         except Exception:
             return Response(
                 {"message": "Invalid token"},

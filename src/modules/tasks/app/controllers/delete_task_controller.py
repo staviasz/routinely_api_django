@@ -13,7 +13,7 @@ class DeleteTaskController(BaseController):
 
     async def execute(self, request):
         try:
-            self.validator.validate(request.get("body") or {})
+            self.validator.validate(request.get("params") or {})
             await self.usecase.perform(self.validator.to_dict())
             return no_content()
         except Exception as e:

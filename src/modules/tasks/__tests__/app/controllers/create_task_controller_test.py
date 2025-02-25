@@ -45,7 +45,7 @@ class TestCreateTaskController:
         }
 
     async def test_execute_return_errors_if_body_is_empty(self):
-        response = await self.controller.execute({"headers": {}})
+        response = await self.controller.execute({"session": {}})
         assert response["status"] == 400
         assert response["body"] == {
             "message": [
@@ -61,15 +61,15 @@ class TestCreateTaskController:
     async def test_execute_validate_field_user_id(self):
         arrange = [
             {
-                "headers": {"user_id": 1},
+                "session": {"user_id": 1},
                 "message": ["user_id: Input should be a valid string"],
             },
             {
-                "headers": {"user_id": True},
+                "session": {"user_id": True},
                 "message": ["user_id: Input should be a valid string"],
             },
             {
-                "headers": {},
+                "session": {},
                 "message": ["user_id: Input should be a valid string"],
             },
         ]
@@ -77,7 +77,7 @@ class TestCreateTaskController:
         for item in arrange:
             response = await self.controller.execute(
                 {
-                    "headers": item["headers"],
+                    "session": item["session"],
                     "body": self.data,
                 }
             )
@@ -118,7 +118,7 @@ class TestCreateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {"session": {"user_id": self.user_id}, "body": item["body"]}
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -150,7 +150,7 @@ class TestCreateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {"session": {"user_id": self.user_id}, "body": item["body"]}
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -189,7 +189,7 @@ class TestCreateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {"session": {"user_id": self.user_id}, "body": item["body"]}
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -220,7 +220,7 @@ class TestCreateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {"session": {"user_id": self.user_id}, "body": item["body"]}
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -253,7 +253,7 @@ class TestCreateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {"session": {"user_id": self.user_id}, "body": item["body"]}
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -286,7 +286,7 @@ class TestCreateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {"session": {"user_id": self.user_id}, "body": item["body"]}
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -315,7 +315,7 @@ class TestCreateTaskController:
 
         for item in arrange:
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": item["body"]}
+                {"session": {"user_id": self.user_id}, "body": item["body"]}
             )
             assert response["status"] == 400
             assert response["body"] == {
@@ -337,7 +337,7 @@ class TestCreateTaskController:
             self.usecase.perform.return_value = {"id": "any_id"}
 
             response = await self.controller.execute(
-                {"headers": {"user_id": self.user_id}, "body": self.data}
+                {"session": {"user_id": self.user_id}, "body": self.data}
             )
             assert response["status"] == 201
             assert response["body"] == {

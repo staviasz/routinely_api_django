@@ -1,12 +1,12 @@
-from typing import TypedDict
-from django.test import TestCase
+import json as J
+from typing import TypedDict, cast
 from django.test import Client
 
 
-class RequestProps(TypedDict):
+class RequestProps(TypedDict, total=False):
     path: str
     headers: dict
-    data: dict
+    data: dict | None
 
 
 class RequestClient:
@@ -19,10 +19,14 @@ class RequestClient:
         return self.client.post(**self.mapper_request(props))
 
     def get(self, props: RequestProps):
-        return self.client.get(**self.mapper_request(props))
+        new_props = self.mapper_request(props)
+        del new_props["data"]
+        return self.client.get(**new_props)
 
     def delete(self, props: RequestProps):
-        return self.client.delete(**self.mapper_request(props))
+        new_props = self.mapper_request(props)
+        del new_props["data"]
+        return self.client.delete(**new_props)
 
     def put(self, props: RequestProps):
         return self.client.put(**self.mapper_request(props))
@@ -33,5 +37,13 @@ class RequestClient:
     def mapper_request(self, request: RequestProps) -> RequestProps:
         path = f"{self.base_url}{request.get('path', '/')}"
         headers = request.get("headers", {})
-        data = request.get("data", {})
-        return {"path": path, "headers": headers, "data": data}
+        data = J.dumps(request.get("data")) or None
+        return cast(
+            RequestProps,
+            {
+                "path": path,
+                "headers": headers,
+                "data": data,
+                "content_type": "application/json",
+            },
+        )

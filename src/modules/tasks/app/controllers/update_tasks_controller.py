@@ -11,9 +11,10 @@ class UpdateTaskController(BaseController):
 
     async def execute(self, request):
         try:
-            user_id = request.get("headers").get("user_id")
+            user_id = request.get("session").get("user_id")
+            id = request.get("params").get("id")
             body = request.get("body", {})
-            data = {"user_id": user_id, **body}
+            data = {"user_id": user_id, **body, "id": id}
 
             self.validator.validate(data)
             await self.usecase.perform(self.validator.to_dict())

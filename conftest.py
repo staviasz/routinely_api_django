@@ -5,11 +5,16 @@ from pathlib import Path
 from django.db import connections
 from django.core.management import call_command
 from django.conf import settings
+import asyncio
+
 
 if not settings.configured:
     django.setup()
 
-from django_.models.models import CustomerDBModel, AccountDBModel
+from modules.auth.factories.services.create_session_service_factory import (
+    create_session_service_factory,
+)
+from django_.models.models import CustomerDBModel, AccountDBModel, SessionDBModel
 
 
 @pytest.fixture(scope="class")
@@ -49,3 +54,39 @@ def fake_customer_db(request):
     yield
     customer.delete()
     account.delete()
+
+
+@pytest.fixture(scope="function")
+def fake_customer_logged():
+    customer_data = {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "email": "john@doe.com",
+        "password": "@Teste123",
+        "accepted_terms": True,
+        "name": "John Doe",
+        "is_active": True,
+    }
+    customer = CustomerDBModel.objects.create(
+        id=customer_data["id"],
+        name=customer_data["name"],
+        accepted_terms=customer_data["accepted_terms"],
+    )
+    account = AccountDBModel.objects.create(
+        id=customer.id,
+        email=customer_data["email"],
+        is_active=customer_data["is_active"],
+        password=customer_data["password"],
+        customer=customer,
+    )
+
+    session = asyncio.run(
+        create_session_service_factory().handle(
+            {"user_id": customer.id, "email": customer_data["email"]}
+        )
+    )
+
+    yield session
+
+    customer.delete()
+    account.delete()
+    SessionDBModel.objects.all().delete()
